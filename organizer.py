@@ -7,38 +7,43 @@ import os.path  # Przydatne do paru rzeczy :)
 
 
 class Organizer:
-
-    user = str(input("Podaj nazwę użytkownika: "))
-    psw = str(input("Podaj hasło: "))
-
+    """def dane_user(self,user,psw):
+        user = str(input("Podaj nazwę użytkownika: "))
+        psw = str(input("Podaj hasło: "))
+"""
     def rejestracja(self):
+        user = str(input("Podaj nazwę użytkownika: "))
+        psw = str(input("Podaj hasło: "))
         with open("users.txt", "r") as users:
             readusers = users.read()
             if os.path.exists("users.txt"):
-                if Organizer.user.lower() in readusers:
+                if user.lower() in readusers:
                     print("Podany użytkownik istnieje. Uzyj opcji \"Logowanie\"")
-                elif Organizer.user in readusers:
+                elif user in readusers:
                     print("Podany użytkownik istnieje. Uzyj opcji \"Logowanie\"")
                 else:
                     with open("users.txt", "a") as addusers:
-                        addusers.write(Organizer.user.lower() + " " + Organizer.psw + "\n")
+                        addusers.write(user.lower() + " " + psw + "\n")
                         print("Użytkownik dodany!")
             else:
                 with open("users.txt", "x") as createusers:
-                    createusers.write(Organizer.user.lower() + " " + Organizer.psw + "\n")
+                    createusers.write(user.lower() + " " + psw + "\n")
                     print("Użytkownik dodany!")
 
     def logowanie(self):
+        user = str(input("Podaj nazwę użytkownika: "))
+        psw = str(input("Podaj hasło: "))
         with open("users.txt", "r") as users:
             checkusers = users.readlines()
-            if (Organizer.user.lower() + " " + Organizer.psw + "\n") in checkusers:
-                print("Witaj, " + Organizer.user + "!")
+            if (user.lower() + " " + psw + "\n") in checkusers:
+                print("Witaj, " + user + "!")
                 Organizer.wybor_opcji(self)
-            elif (Organizer.user + " " + Organizer.psw + "\n") in checkusers:
-                print("Witaj, " + Organizer.user + "!")
+            elif (user + " " + psw + "\n") in checkusers:
+                print("Witaj, " + user + "!")
                 Organizer.wybor_opcji(self)
             else:
                 print("Zły login lub hasło!")
+            return user
 
     def wybor_opcji(self):
         while True:
@@ -112,5 +117,5 @@ while True:
     elif choice == "2":
         lg.logowanie()
     elif choice == "q":
-        print("Żegnaj, " + Organizer.user + "!")
+        print("Żegnaj, " + lg.logowanie() + "!")
         break
