@@ -117,5 +117,5 @@ while True:
     elif choice == "2":
         lg.logowanie()
     elif choice == "q":
-        print("Żegnaj, " + lg.logowanie() + "!")
+        print("Żegnaj!")
         break
