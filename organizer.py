@@ -89,7 +89,7 @@ class Organizer:  # Użyłem klasy tylko dlatego, że mogę odnosić się do dow
             elif menu2 == "3":
                 Organizer.menu_usun_zadanie(self)
             elif menu2 == "4":
-                pass
+                Organizer.menu_modyfikuj(self)
             elif menu2 == "q" or menu2.lower == "q" or menu2.upper() == "Q":
                 break
             else:
@@ -142,21 +142,21 @@ class Organizer:  # Użyłem klasy tylko dlatego, że mogę odnosić się do dow
             if os.path.exists("tasks/"+self.user.lower()):
                 if os.path.exists("tasks/"+self.user.lower()+"/%s.txt" % self.user.lower()):
                     with open("tasks/"+self.user.lower()+"/%s.txt" % self.user.lower(), "a") as addtask:
-                        addtask.write(data + " " + zadanie + "\n")
+                        addtask.write(data + " " + zadanie + " (Aktywne) " + "\n")
                         print("Zadanie dodane!")
                 else:
                     with open("tasks/"+self.user.lower()+"/%s.txt" % self.user.lower(), "x") as addtask:
-                        addtask.write(data + " " + zadanie + "\n")
+                        addtask.write(data + " " + zadanie + " (Aktywne) " + "\n")
                         print("Zadanie dodane!")
             else:
                 os.makedirs("tasks/"+self.user.lower())
                 with open("tasks/"+self.user.lower()+"/%s.txt" % self.user.lower(), "x") as addtask:
-                    addtask.write(data + " " + zadanie + "\n")
+                    addtask.write(data + " " + zadanie + " (Aktywne) " + "\n")
                     print("Zadanie dodane!")
         else:
             os.makedirs("tasks/"+self.user.lower())
             with open("tasks/"+self.user.lower()+"/%s.txt" % self.user.lower(), "x") as addtask:
-                addtask.write(data + " " + zadanie + "\n")
+                addtask.write(data + " " + zadanie + " (Aktywne) " + "\n")
                 print("Zadanie dodane!")
 
     def wyswietl_notatki(self):
@@ -436,31 +436,31 @@ class Organizer:  # Użyłem klasy tylko dlatego, że mogę odnosić się do dow
         if os.path.exists("tasks"):
             if os.path.exists("tasks/"+self.user.lower()+"/tasks_list"):
                 with open("tasks/"+self.user.lower()+"/tasks_list/"+tytul+".txt", "x") as create_list:
-                    create_list.write(czas+" "+tytul+"\n")
+                    create_list.write(czas+" "+tytul+" (Aktywne) " + "\n")
                 with open("tasks/" + self.user.lower() + "/tasks_list/" + tytul + ".txt", "a") as make_list:
                     while i != ilosc:
                         poz = str(input("Wpisz zadanie (jeszcze "+str(ilosc-i)+"): "))
-                        make_list.write(poz+"\n")
+                        make_list.write(poz+" (Niezrobione) "+"\n")
                         i += 1
                 print("Lista stworzona!")
             else:
                 os.makedirs("tasks/"+self.user.lower()+"/tasks_list")
                 with open("tasks/"+self.user.lower()+"/tasks_list/"+tytul+".txt", "x") as create_list:
-                    create_list.write(czas + " " + tytul+"\n")
+                    create_list.write(czas + " " + tytul+" (Aktywne) "+"\n")
                 with open("tasks/"+self.user.lower()+"/tasks_list/"+tytul+".txt", "a") as make_list:
                     while i != ilosc:
                         poz = str(input("Wpisz zadanie (jeszcze "+str(ilosc-i)+"): "))
-                        make_list.write(poz+"\n")
+                        make_list.write(poz+" (Niezrobione) "+"\n")
                         i += 1
                 print("Lista stworzona!")
         else:
             os.makedirs("tasks/"+self.user.lower()+"/tasks_list")
             with open("tasks/" + self.user.lower() + "/tasks_list/" + tytul + ".txt", "x") as create_list:
-                create_list.write(czas + " " + tytul+"\n")
+                create_list.write(czas + " " + tytul+" (Aktywne) "+"\n")
             with open("tasks/" + self.user.lower() + "/tasks_list/" + tytul + ".txt", "a") as make_list:
                 while i != ilosc:
                     poz = str(input("Wpisz zadanie (jeszcze " + str(ilosc - i) + "): "))
-                    make_list.write(poz+"\n")
+                    make_list.write(poz+" (Niezrobione) "+"\n")
                     i += 1
             print("Lista stworzona!")
 
@@ -517,6 +517,37 @@ class Organizer:  # Użyłem klasy tylko dlatego, że mogę odnosić się do dow
                 print("Lista zadań usunięta!")
             else:
                 print("Nie ma takiej listy do usunięcia!")
+
+    def menu_modyfikuj(self):
+        while True:
+            menu = str(input("Wybierz opcję: "
+                             "[1]Oznacz zadanie jako ukończone, "
+                             "[2]Oznacz zadanie z listy jako ukończone, "
+                             "[3]Oznacz listę zadań jako skończoną, "
+                             "[q]Wyjdź z menu: "))
+            if menu == "1":
+                Organizer.ukoncz_zadanie(self)
+            elif menu == "2":
+                pass
+            elif menu == "3":
+                pass
+            elif menu == "q" or menu.lower == "q":
+                break
+            else:
+                print("Zły wybór")
+
+    def ukoncz_zadanie(self):
+        Organizer.wyswietl_zadania(self)
+        wybor = str(input("Wybierz ukończone zadanie: "))
+        with open("tasks/"+self.user.lower()+"/%s.txt" % self.user.lower(), "r+") as readtask:
+            ukoncz = readtask.read().replace("(Aktywne)", "(Zrobione)")
+            # with open("tasks/"+self.user.lower()+"/%s.txt" % self.user.lower(), "w") as activatetask:
+            for lines in readtask:
+                if wybor in lines:
+                    readtask.write(ukoncz)
+                    print("Zadanie ukończone!")
+                else:
+                    print("Nie ma takiego zadania!")
 
 
 Organizer().main()
