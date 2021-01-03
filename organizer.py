@@ -1,6 +1,6 @@
 import datetime  # Użyję później do sortowania, lub czegoś innego
 
-import os.path  # Przydatne do paru rzeczy :)
+import os  # Przydatne do paru rzeczy :)
 
 
 #  import tkinter : Na ten moment tego nie używam
@@ -117,11 +117,11 @@ class Organizer:  # Użyłem klasy tylko dlatego, że mogę odnosić się do dow
         if os.path.exists("notes"):
             if os.path.exists("notes/" + self.user.lower()):
                 if os.path.exists("notes/"+self.user.lower()+"/%s.txt" % self.user.lower()):
-                    with open("notes/"+self.user.lower()+"%s.txt" % self.user.lower(), "a") as addnote:
+                    with open("notes/"+self.user.lower()+"/%s.txt" % self.user.lower(), "a") as addnote:
                         addnote.write(notatka + "\n")
                         print("Notatka dodana!")
                 else:
-                    with open("notes/"+self.user.lower()+"%s.txt" % self.user.lower(), "x") as addnote:
+                    with open("notes/"+self.user.lower()+"/%s.txt" % self.user.lower(), "x") as addnote:
                         addnote.write(notatka + "\n")
                         print("Notatka dodana!")
             else:
@@ -154,8 +154,8 @@ class Organizer:  # Użyłem klasy tylko dlatego, że mogę odnosić się do dow
                     addtask.write(data + " " + zadanie + "\n")
                     print("Zadanie dodane!")
         else:
-            os.makedirs("tasks")
-            with open("tasks/%s.txt" % self.user.lower(), "x") as addtask:
+            os.makedirs("tasks/"+self.user.lower())
+            with open("tasks/"+self.user.lower()+"/%s.txt" % self.user.lower(), "x") as addtask:
                 addtask.write(data + " " + zadanie + "\n")
                 print("Zadanie dodane!")
 
@@ -169,7 +169,7 @@ class Organizer:  # Użyłem klasy tylko dlatego, że mogę odnosić się do dow
 
     def wyswietl_zadania(self):
         if os.path.exists("tasks/"+self.user.lower()+"/%s.txt" % self.user.lower()):
-            with open("tasks/"+self.user.lower()+"/%s" % self.user.lower(), "r") as readtasks:
+            with open("tasks/"+self.user.lower()+"/%s.txt" % self.user.lower(), "r") as readtasks:
                 for lines in readtasks:
                     print(lines.rstrip())
         else:
@@ -189,6 +189,7 @@ class Organizer:  # Użyłem klasy tylko dlatego, że mogę odnosić się do dow
 
     def usun_zadanie(self):
         if os.path.exists("tasks/"+self.user.lower()+"/%s.txt" % self.user):
+            Organizer.wyswietl_zadania(self)
             dtask = str(input("Wpisz nazwę zadania: "))
             dtaskdate = str(input("Wpisz datę tego zadania (RRRR-MM-DD): "))
             with open("tasks/"+self.user.lower()+"/%s.txt" % self.user, "r") as readtask:
@@ -197,7 +198,7 @@ class Organizer:  # Użyłem klasy tylko dlatego, że mogę odnosić się do dow
                 for line in readtaskls:
                     if line.strip("\n") != (dtaskdate + " " + dtask):
                         writelines.write(line)
-                        print("Zadanie usunięte!")
+            print("Zadanie usunięte!")
         else:
             print("Brak zadań do usunięcia!")
 
@@ -215,6 +216,7 @@ class Organizer:  # Użyłem klasy tylko dlatego, że mogę odnosić się do dow
 
     def usun_notatke(self):
         if os.path.exists("notes/"+self.user.lower()+"/%s.txt" % self.user):
+            Organizer.wyswietl_notatki(self)
             dnote = str(input("Wpisz którą notatkę usunąć: "))
             with open("notes/"+self.user.lower()+"/%s.txt" % self.user, "r") as readnote:
                 readnotels = readnote.readlines()
@@ -222,7 +224,7 @@ class Organizer:  # Użyłem klasy tylko dlatego, że mogę odnosić się do dow
                 for line in readnotels:
                     if line.strip("\n") != dnote:
                         writelines.write(line)
-                        print("Notatka usunięta!")
+            print("Notatka usunięta!")
 
     def sortowanie_zadan(self):
         if os.path.exists("tasks/"+self.user.lower()+"/%s.txt" % self.user.lower()):
@@ -393,60 +395,85 @@ class Organizer:  # Użyłem klasy tylko dlatego, że mogę odnosić się do dow
 
     def lista_rzeczy(self):
         tytul = str(input("Podaj tytuł listy: "))
-        ilosc = int(input("Podaj ilość pozycji (numerycznie)"))
+        ilosc = int(input("Podaj ilość pozycji (numerycznie): "))
         i = 0
         if os.path.exists("notes"):
             if os.path.exists("notes/"+self.user.lower()+"/notes_list"):
-                with open("notes/"+self.user.lower()+"/notes_list/"+tytul+".txt", "x") as make_list:
+                with open("notes/"+self.user.lower()+"/notes_list/"+tytul+".txt", "x") as create_list:
+                    create_list.write(tytul + ":\n")
+                with open("notes/"+self.user.lower()+"/notes_list/"+tytul+".txt", "a") as make_list:
                     while i != ilosc:
                         poz = str(input("Wpisz coś (jeszcze "+str(ilosc-i)+"): "))
-                        make_list.write(poz)
+                        make_list.write(poz+"\n")
                         i += 1
+                print("Lista stworzona!")
             else:
                 os.makedirs("notes/"+self.user.lower()+"/notes_list")
+                with open("notes/" + self.user.lower() + "/notes_list/" + tytul + ".txt", "x") as create_list:
+                    create_list.write(tytul + ":\n")
+                with open("notes/" + self.user.lower() + "/notes_list/" + tytul + ".txt", "a") as make_list:
+                    while i != ilosc:
+                        poz = str(input("Wpisz coś (jeszcze "+str(ilosc-i)+"): "))
+                        make_list.write(poz+"\n")
+                        i += 1
+                print("Lista stworzona!")
         else:
             os.makedirs("notes/"+self.user.lower()+"/notes_list")
-            with open("notes/"+self.user.lower()+"/notes_list/"+tytul+".txt", "x") as make_list:
+            with open("notes/" + self.user.lower() + "/notes_list/" + tytul + ".txt", "x") as create_list:
+                create_list.write(tytul + ":\n")
+            with open("notes/" + self.user.lower() + "/notes_list/" + tytul + ".txt", "a") as make_list:
                 while i != ilosc:
                     poz = str(input("Wpisz coś (jeszcze "+str(ilosc-i)+"): "))
-                    make_list.write(poz)
+                    make_list.write(poz+"\n")
                     i += 1
+            print("Lista stworzona!")
 
     def lista_zadan(self):
         tytul = str(input("Podaj tytuł listy zadań: "))
         ilosc = int(input("Podaj ilość zadań (numerycznie): "))
+        czas = str(input("Podaj datę (RRRR-MM-DD): "))
         i = 0
         if os.path.exists("tasks"):
             if os.path.exists("tasks/"+self.user.lower()+"/tasks_list"):
-                with open("tasks/"+self.user.lower()+"/tasks_list/"+tytul+".txt", "x") as make_list:
+                with open("tasks/"+self.user.lower()+"/tasks_list/"+tytul+".txt", "x") as create_list:
+                    create_list.write(czas+" "+tytul+"\n")
+                with open("tasks/" + self.user.lower() + "/tasks_list/" + tytul + ".txt", "a") as make_list:
                     while i != ilosc:
                         poz = str(input("Wpisz zadanie (jeszcze "+str(ilosc-i)+"): "))
-                        make_list.write(poz)
+                        make_list.write(poz+"\n")
                         i += 1
+                print("Lista stworzona!")
             else:
                 os.makedirs("tasks/"+self.user.lower()+"/tasks_list")
-                with open("tasks/"+self.user.lower()+"/tasks_list/"+tytul+".txt", "x") as make_list:
+                with open("tasks/"+self.user.lower()+"/tasks_list/"+tytul+".txt", "x") as create_list:
+                    create_list.write(czas + " " + tytul+"\n")
+                with open("tasks/"+self.user.lower()+"/tasks_list/"+tytul+".txt", "a") as make_list:
                     while i != ilosc:
                         poz = str(input("Wpisz zadanie (jeszcze "+str(ilosc-i)+"): "))
-                        make_list.write(poz)
+                        make_list.write(poz+"\n")
                         i += 1
+                print("Lista stworzona!")
         else:
             os.makedirs("tasks/"+self.user.lower()+"/tasks_list")
-            with open("tasks/"+self.user.lower()+"/tasks_list"+tytul+".txt", "x") as make_list:
+            with open("tasks/" + self.user.lower() + "/tasks_list/" + tytul + ".txt", "x") as create_list:
+                create_list.write(czas + " " + tytul+"\n")
+            with open("tasks/" + self.user.lower() + "/tasks_list/" + tytul + ".txt", "a") as make_list:
                 while i != ilosc:
                     poz = str(input("Wpisz zadanie (jeszcze " + str(ilosc - i) + "): "))
-                    make_list.write(poz)
+                    make_list.write(poz+"\n")
                     i += 1
+            print("Lista stworzona!")
 
     def wyswietl_liste_zadan(self):
         if os.path.exists("tasks/"+self.user.lower()+"/tasks_list"):
+            listy = os.listdir("tasks/" + self.user.lower() + "/tasks_list")
             print("Twoje listy zadań: ")
-            os.listdir("tasks/"+self.user.lower()+"/tasks_list")
+            print(listy)
             wybor = str(input("Wpisz nazwę listy do wyświetlenia (bez .txt): "))
             if os.path.exists("tasks/"+self.user.lower()+"/tasks_list/"+wybor+".txt"):
                 with open("tasks/"+self.user.lower()+"/tasks_list/"+wybor+".txt", "r") as read_list:
-                    for line in read_list.readline():
-                        line.rstrip()
+                    for line in read_list:
+                        print(line.rstrip())
             else:
                 print("Nie ma takiej listy!")
         else:
@@ -454,13 +481,14 @@ class Organizer:  # Użyłem klasy tylko dlatego, że mogę odnosić się do dow
 
     def wyswietl_liste_rzeczy(self):
         if os.path.exists("notes/"+self.user.lower()+"/notes_list"):
+            listy = os.listdir("tasks/" + self.user.lower() + "/notes_list")
             print("Twoje listy rzeczy: ")
-            os.listdir("notes/"+self.user.lower()+"/notes_list")
+            print(listy)
             wybor = str(input("Wpisz nazwę listy do wyświetlenia (bez.txt): "))
             if os.path.exists("notes/"+self.user.lower()+"/notes_list/"+wybor+".txt"):
                 with open("notes/"+self.user.lower()+"/notes_list/"+wybor+".txt", "r") as read_list:
-                    for line in read_list.readline():
-                        line.rstrip()
+                    for line in read_list:
+                        print(line.rstrip())
             else:
                 print("Nie ma takiej listy!")
         else:
@@ -468,8 +496,9 @@ class Organizer:  # Użyłem klasy tylko dlatego, że mogę odnosić się do dow
 
     def usun_liste_zadan(self):
         if os.path.exists("tasks/"+self.user.lower()+"/tasks_list"):
+            listy = os.listdir("tasks/"+self.user.lower()+"/tasks_list")
             print("Twoje listy zadań: ")
-            os.listdir("tasks/"+self.user.lower()+"/tasks_list")
+            print(listy)
             wybor = str(input("Wpisz nazwę listy do usunięcia (bez.txt): "))
             if os.path.exists("tasks/" + self.user.lower() + "/tasks_list/" + wybor + ".txt"):
                 os.remove("tasks/" + self.user.lower() + "/tasks_list/" + wybor + ".txt")
@@ -479,8 +508,9 @@ class Organizer:  # Użyłem klasy tylko dlatego, że mogę odnosić się do dow
 
     def usun_liste_rzeczy(self):
         if os.path.exists("notes/"+self.user.lower()+"/notes_list"):
+            listy = os.listdir("tasks/" + self.user.lower() + "/notes_list")
             print("Twoje listy rzeczy: ")
-            os.listdir("notes/"+self.user.lower()+"/notes_list")
+            print(listy)
             wybor = str(input("Wpisz nazwę listy do usunięcia (bez.txt): "))
             if os.path.exists("notes/" + self.user.lower() + "/notes_list/" + wybor + ".txt"):
                 os.remove("notes/" + self.user.lower() + "/notes_list/" + wybor + ".txt")
