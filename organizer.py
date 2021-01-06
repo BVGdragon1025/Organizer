@@ -614,7 +614,7 @@ class Organizer:  # Użyłem klasy tylko dlatego, że mogę odnosić się do dow
                 print("\"Listy zadań\" pozwalają zapisywać ciąg zadań w osobnym pliku")
                 print("Zachowują się dzięki temu jak np. kroki do osiągnięcia celu lub listy kontrolne")
                 print("Listy zadań można jedynie tworzyć i usuwać, lecz może to ulec zmianie w przyszłości")
-                print("Każda z nich ma przypisaną datę ukończenia, którą możesz sprecyzować")
+                print("Każda z nich ma przypisaną datę ukończenia, którą możesz sprecyzować ")
                 print("")
             elif wybor.lower() == "q" or wybor == "q":
                 break
