@@ -1,4 +1,4 @@
-import datetime  # Użyję później do sortowania, lub czegoś innego
+# import datetime   Użyję później do sortowania, lub czegoś innego
 
 import os  # Przydatne do paru rzeczy :)
 
@@ -16,43 +16,44 @@ class Organizer:  # Użyłem klasy tylko dlatego, że mogę odnosić się do dow
         self.user = user
         self.psw = psw
 
-    def main(self):
+    def main(self):  # Główne menu, które powinno sie pojawiać najpierw, ale zrobiłem to coś na górze :)
         while True:
             choice = str(input("Wybierz co chcesz zrobić: [1]Rejestracja, [2]Logowanie, [q]Wyjście: "))
             if choice == "1":
                 Organizer.rejestracja(self)
             elif choice == "2":
                 Organizer.logowanie(self)
-            elif choice == "q" or choice.lower == "q" or choice.upper() == "Q":
+            elif choice == "q" or choice.lower == "q":
                 print("Żegnaj!")
                 break
             else:
                 print("Zły wybór!")
 
-    def rejestracja(self):
+    def rejestracja(self):  # Zapisuje login i hasło do pliku "users.txt"
+        #  Na ten moment jest to kompletnie nie szyfrowane :)
         if os.path.exists("users.txt"):
-            with open("users.txt", "r") as users:
+            with open("users.txt", "r") as users:  # Zamiast users = file.open("users.txt", "r")
                 readusers = users.read()
-                if self.user.lower() in readusers:
+                if self.user.lower() in readusers:  # Tak samo jak wyżej
                     print("Podany użytkownik istnieje. Uzyj opcji \"Logowanie\"")
                 elif self.user in readusers:
                     print("Podany użytkownik istnieje. Uzyj opcji \"Logowanie\"")
                 else:
-                    with open("users.txt", "a") as addusers:
+                    with open("users.txt", "a") as addusers:  # Dodaje login i hasło w takim formacie do pliku
                         addusers.write(self.user.lower() + " " + self.psw + "\n")
                         print("Użytkownik dodany!")
-        else:
+        else:  # Na wypaddek gdyby nie było pliku
             with open("users.txt", "x") as createusers:
                 createusers.write(self.user.lower() + " " + self.psw + "\n")
                 print("Użytkownik dodany!")
 
-    def logowanie(self):
+    def logowanie(self):  # Sprawdza czy kombinacja loginu i hasła jest w pliku "users.txt"
         if os.path.exists("users.txt"):
             with open("users.txt", "r") as users:
-                checkusers = users.readlines()
+                checkusers = users.readlines()  # Odczytuje linie w pliku
                 if (self.user.lower() + " " + self.psw + "\n") in checkusers:
                     print("Witaj, " + self.user + "!")
-                    Organizer.wybor_opcji(self)
+                    Organizer.wybor_opcji(self)  # Funkcja wyświetlająca menu wyboru
                 elif (self.user + " " + self.psw + "\n") in checkusers:
                     print("Witaj, " + self.user + "!")
                     Organizer.wybor_opcji(self)
@@ -61,16 +62,20 @@ class Organizer:  # Użyłem klasy tylko dlatego, że mogę odnosić się do dow
         else:
             print("Brak użytkowników! Użyj opcji \"Zarejestruj\"")
 
-    def wybor_opcji(self):
+    def wybor_opcji(self):  # Wybór opcji.
         while True:
-            choice2 = str(input("Wybierz którą kategorię chcesz wybrać: [1]Notatki, [2]Zadania, [q]Wyloguj: "))
+            choice2 = str(input("Wybierz którą kategorię chcesz wybrać: "
+                                "[1]Notatki, "
+                                "[2]Zadania, "
+                                "[3]Pomoc, "
+                                "[q]Wyloguj: "))
             if choice2 == "1":
                 Organizer.menu_notatki(self)
             elif choice2 == "2":
                 Organizer.menu_zadania(self)
             elif choice2 == "3":
-                print(datetime.date.today())
-            elif choice2 == "q" or choice2.lower == "q" or choice2.upper() == "Q":
+                Organizer.menu_pomoc(self)
+            elif choice2 == "q" or choice2.lower == "q":
                 break
             else:
                 print("Zły wybór")
@@ -80,7 +85,7 @@ class Organizer:  # Użyłem klasy tylko dlatego, że mogę odnosić się do dow
             menu2 = str(input("Wybierz opcję: [1]Utwórz..., "
                               "[2]Wyświetl... "
                               "[3]Usuń..., "
-                              "[4]Modyfikuj..."
+                              "[4]Modyfikuj... , "
                               "[q]Wyjdź z menu: "))
             if menu2 == "1":
                 Organizer.menu_utworz_zadanie(self)
@@ -90,7 +95,7 @@ class Organizer:  # Użyłem klasy tylko dlatego, że mogę odnosić się do dow
                 Organizer.menu_usun_zadanie(self)
             elif menu2 == "4":
                 Organizer.menu_modyfikuj(self)
-            elif menu2 == "q" or menu2.lower == "q" or menu2.upper() == "Q":
+            elif menu2 == "q" or menu2.lower == "q":
                 break
             else:
                 print("Zły wybór!")
@@ -107,12 +112,14 @@ class Organizer:  # Użyłem klasy tylko dlatego, że mogę odnosić się do dow
                 Organizer.menu_wyswietl_notatke(self)
             elif menu1 == "3":
                 Organizer.menu_usun_notatke(self)
-            elif menu1 == "q" or menu1.lower == "q" or menu1.upper() == "Q":
+            elif menu1 == "q" or menu1.lower == "q":
                 break
             else:
                 print("Zły wybór!")
 
-    def dodaj_notatke(self):
+    def dodaj_notatke(self):  # Dodaje notatkę do pliku.
+        # Dopisalem wszelkie zabezpieczenia na wypadek braku pliku etc.
+        # Notatki są w lokalizacji "notes/nazwa_użytkownika/notes.txt"
         notatka = str(input("Wpisz swoją notatkę: "))
         if os.path.exists("notes"):
             if os.path.exists("notes/" + self.user.lower()):
@@ -135,35 +142,37 @@ class Organizer:  # Użyłem klasy tylko dlatego, że mogę odnosić się do dow
                 addnote.write(notatka + "\n")
                 print("Notatka dodana!")
 
-    def dodaj_zadanie(self):
+    def dodaj_zadanie(self):  # Dodaje zadanie do pliku.
+        # Dopisalem wszelkie zabezpieczenia na wypadek braku pliku etc.
+        # Notatki są w lokalizacji "tasks/nazwa_użytkownika/tasks.txt"
         zadanie = str(input("Wpisz zadanie: "))
         data = str(input("Wpisz datę (RRRR-MM-DD): "))
         if os.path.exists("tasks"):
             if os.path.exists("tasks/"+self.user.lower()):
                 if os.path.exists("tasks/"+self.user.lower()+"/%s.txt" % self.user.lower()):
                     with open("tasks/"+self.user.lower()+"/%s.txt" % self.user.lower(), "a") as addtask:
-                        addtask.write(data + " " + zadanie + " (Aktywne) " + "\n")
+                        addtask.write(data + " " + zadanie + "\n")
                         print("Zadanie dodane!")
                 else:
                     with open("tasks/"+self.user.lower()+"/%s.txt" % self.user.lower(), "x") as addtask:
-                        addtask.write(data + " " + zadanie + " (Aktywne) " + "\n")
+                        addtask.write(data + " " + zadanie + "\n")
                         print("Zadanie dodane!")
             else:
                 os.makedirs("tasks/"+self.user.lower())
                 with open("tasks/"+self.user.lower()+"/%s.txt" % self.user.lower(), "x") as addtask:
-                    addtask.write(data + " " + zadanie + " (Aktywne) " + "\n")
+                    addtask.write(data + " " + zadanie + "\n")
                     print("Zadanie dodane!")
         else:
             os.makedirs("tasks/"+self.user.lower())
             with open("tasks/"+self.user.lower()+"/%s.txt" % self.user.lower(), "x") as addtask:
-                addtask.write(data + " " + zadanie + " (Aktywne) " + "\n")
+                addtask.write(data + " " + zadanie + "\n")
                 print("Zadanie dodane!")
 
-    def wyswietl_notatki(self):
+    def wyswietl_notatki(self):  # Jak nazwa wskazuje
         if os.path.exists("notes/"+self.user.lower()+"/%s.txt" % self.user.lower()):
             with open("notes/"+self.user.lower()+"/%s.txt" % self.user.lower(), "r") as readnotes:
                 for lines in readnotes:
-                    print(lines.rstrip())
+                    print(lines.rstrip())  # Obcina puste linie powstałe przez "\n"
         else:
             print("Brak notatek!")
 
@@ -171,23 +180,24 @@ class Organizer:  # Użyłem klasy tylko dlatego, że mogę odnosić się do dow
         if os.path.exists("tasks/"+self.user.lower()+"/%s.txt" % self.user.lower()):
             with open("tasks/"+self.user.lower()+"/%s.txt" % self.user.lower(), "r") as readtasks:
                 for lines in readtasks:
-                    print(lines.rstrip())
+                    print(lines.rstrip())  # Obcina puste linie powstałe przez "\n"
         else:
             print("Brak notatek!")
 
-    def usun_wsz_zadania(self):
+    def usun_wsz_zadania(self):  # Działanie jest proste:
+        # Otwórz plik w trybie zapisu i zamknij go. Wszelkie dane zostaną nadpisane :)
         if os.path.exists("tasks/"+self.user.lower()+"/%s.txt" % self.user):
             check = str(input("Czy chcesz trwale usunąć wszystkie zadania? [y]Tak, [n]Nie: "))
-            if check == "y" or check.lower() == "y" or check.upper() == "Y":
+            if check == "y" or check.lower() == "y":
                 with open("tasks/"+self.user.lower()+"/%s.txt" % self.user, "w") as deletetasks:
                     deletetasks.close()
                 print("Zadania zosatały usunięte!")
-            elif check == "n" or check.lower() == "n" or check.upper() == "N":
+            elif check == "n" or check.lower() == "n":
                 pass
         else:
             print("Brak zadań do usunięcia!")
 
-    def usun_zadanie(self):
+    def usun_zadanie(self):  # Usuwa zadanie. Aby usunęło odpowiednie, stwierdziłem, że spytam usera o nazwę i datę.
         if os.path.exists("tasks/"+self.user.lower()+"/%s.txt" % self.user):
             Organizer.wyswietl_zadania(self)
             dtask = str(input("Wpisz nazwę zadania: "))
@@ -196,20 +206,22 @@ class Organizer:  # Użyłem klasy tylko dlatego, że mogę odnosić się do dow
                 readtaskls = readtask.readlines()
             with open("tasks/"+self.user.lower()+"/%s.txt" % self.user, "w") as writelines:
                 for line in readtaskls:
-                    if line.strip("\n") != (dtaskdate + " " + dtask):
+                    if line.strip("\n") != (dtaskdate + " " + dtask)\
+                            and line.strip("\n") != (dtaskdate + " " + dtask + " (Zrobione)"):
+                        # zapisuje wszystkie linie po za tą wpisaną przez usera
                         writelines.write(line)
             print("Zadanie usunięte!")
         else:
             print("Brak zadań do usunięcia!")
 
-    def usun_wsz_notatki(self):
+    def usun_wsz_notatki(self):  # jak przy usun_wszystkie_zadania()
         if os.path.exists("notes/"+self.user.lower()+"/%s.txt" % self.user):
             check2 = str(input("Czy chcesz trwale usunąć wszystkie notatki? [y]Tak, [n]Nie: "))
-            if check2 == "y" or check2.lower() == "y" or check2.upper() == "Y":
+            if check2 == "y" or check2.lower() == "y":
                 with open("notes/"+self.user.lower()+"/%s.txt" % self.user, "w") as deletenotes:
                     deletenotes.close()
                 print("Notatki zostały usunięte!")
-            elif check2 == "n" or check2.lower() == "n" or check2.upper() == "N":
+            elif check2 == "n" or check2.lower() == "n":
                 pass
         else:
             print("Brak notatek do usunięcia!")
@@ -226,25 +238,28 @@ class Organizer:  # Użyłem klasy tylko dlatego, że mogę odnosić się do dow
                         writelines.write(line)
             print("Notatka usunięta!")
 
-    def sortowanie_zadan(self):
+    def sortowanie_zadan(self):  # Sortowanie zadań od najwcześniejszego.
+        # W sumie nie jest to przydatne, bo nie zaimplementowałem funkcji wyświetlania ile zostało czasu.
+        # Ale kto wie, może się zawsze przydać
         if os.path.exists("tasks/"+self.user.lower()+"/%s.txt" % self.user.lower()):
             with open("tasks/"+self.user.lower()+"/%s.txt" % self.user, "r") as readtasks:
-                task_temp = []
-                for line in readtasks:
-                    temp_lines = line.splitlines()
+                task_temp = []  # Tymczasowa tablica do przechowania zadań
+                for line in readtasks:  # Odczytanie lini w pliku
+                    temp_lines = line.splitlines()  # Przepisanie wszystkich lini bez "\n"
                     for i in temp_lines:
-                        task_temp.append(i)
-                task_temp.sort()
+                        task_temp.append(i)  # Zapisanie wszystkiego do tej tablicy
+                task_temp.sort()  # Sortowanie, jeden z powodów dlaczego data jest na początku zadania
                 for i in task_temp:
-                    print(i)
-            task_temp.clear()
+                    print(i)  # Wyświetlenie wszystkiego w ładnej kolejności
+            task_temp.clear()  # Wyczyszczenie tablicy na wszelki wypadek
         else:
             print("Brak zadań do posortowania!")
 
     def dodaj_notatki(self):
         ilosc = int(input("Ile notatek chcesz dodać (liczbowo): "))
         i = 0
-        while i != ilosc:
+        while i != ilosc:  # Prosty while, aby nie musieć przepisywać kodu, który już mam
+            # Co i tak uczyniłem w późniejszych
             Organizer.dodaj_notatke(self)
             i += 1
 
@@ -315,8 +330,6 @@ class Organizer:  # Użyłem klasy tylko dlatego, że mogę odnosić się do dow
                              "[1]Wyświetl zadania, "
                              "[2]Wyświetl listę zadań, "
                              "[3]Wyświetl zadania (od nadchodzących), "
-                             "[4]Wyświetl aktywne zadania, "
-                             "[5]Wyświetl ukończone zadania, "
                              "[q]Wyjdź z menu: "))
             if menu == "1":
                 Organizer.wyswietl_zadania(self)
@@ -355,7 +368,7 @@ class Organizer:  # Użyłem klasy tylko dlatego, że mogę odnosić się do dow
                              "[2]Usuń kilka zadań, "
                              "[3]Usuń wszystkie zadania, "
                              "[4]Usuń listę zadań, "
-                             "[5]Usuń ukończone zadania, "
+                             "[5]Usuń skończone zadania, "
                              "[q]Wyjdź z menu: "))
             if menu == "1":
                 Organizer.usun_zadanie(self)
@@ -393,7 +406,10 @@ class Organizer:  # Użyłem klasy tylko dlatego, że mogę odnosić się do dow
             else:
                 print("Zły wybór")
 
-    def lista_rzeczy(self):
+    def lista_rzeczy(self):  # Na to miałem pomysł, aby to było jako osobna lista rzeczy.
+        # W tym celu tworzy osobny folder w lokalizacji z notatkami o nazwie "notes_list"
+        # Nazwa listy to tytuł, który user podaje
+        # Większość tego kodu to tylko upewnienie się, że plik istnieje, a jak nie to zostanie utworzony
         tytul = str(input("Podaj tytuł listy: "))
         ilosc = int(input("Podaj ilość pozycji (numerycznie): "))
         i = 0
@@ -428,7 +444,10 @@ class Organizer:  # Użyłem klasy tylko dlatego, że mogę odnosić się do dow
                     i += 1
             print("Lista stworzona!")
 
-    def lista_zadan(self):
+    def lista_zadan(self):  # Na to miałem pomysł, aby to było jako osobna lista zadań.
+        # W tym celu tworzy osobny folder w lokalizacji z zadaniami o nazwie "tasks_list"
+        # Nazwa listy to tytuł, który user podaje
+        # Większość tego kodu to tylko upewnienie się, że plik istnieje, a jak nie to zostanie utworzony
         tytul = str(input("Podaj tytuł listy zadań: "))
         ilosc = int(input("Podaj ilość zadań (numerycznie): "))
         czas = str(input("Podaj datę (RRRR-MM-DD): "))
@@ -436,42 +455,42 @@ class Organizer:  # Użyłem klasy tylko dlatego, że mogę odnosić się do dow
         if os.path.exists("tasks"):
             if os.path.exists("tasks/"+self.user.lower()+"/tasks_list"):
                 with open("tasks/"+self.user.lower()+"/tasks_list/"+tytul+".txt", "x") as create_list:
-                    create_list.write(czas+" "+tytul+" (Aktywne) " + "\n")
+                    create_list.write(czas+" "+tytul+"\n")
                 with open("tasks/" + self.user.lower() + "/tasks_list/" + tytul + ".txt", "a") as make_list:
                     while i != ilosc:
                         poz = str(input("Wpisz zadanie (jeszcze "+str(ilosc-i)+"): "))
-                        make_list.write(poz+" (Niezrobione) "+"\n")
+                        make_list.write(poz+"\n")
                         i += 1
                 print("Lista stworzona!")
             else:
                 os.makedirs("tasks/"+self.user.lower()+"/tasks_list")
                 with open("tasks/"+self.user.lower()+"/tasks_list/"+tytul+".txt", "x") as create_list:
-                    create_list.write(czas + " " + tytul+" (Aktywne) "+"\n")
+                    create_list.write(czas + " " + tytul+"\n")
                 with open("tasks/"+self.user.lower()+"/tasks_list/"+tytul+".txt", "a") as make_list:
                     while i != ilosc:
                         poz = str(input("Wpisz zadanie (jeszcze "+str(ilosc-i)+"): "))
-                        make_list.write(poz+" (Niezrobione) "+"\n")
+                        make_list.write(poz+"\n")
                         i += 1
                 print("Lista stworzona!")
         else:
             os.makedirs("tasks/"+self.user.lower()+"/tasks_list")
             with open("tasks/" + self.user.lower() + "/tasks_list/" + tytul + ".txt", "x") as create_list:
-                create_list.write(czas + " " + tytul+" (Aktywne) "+"\n")
+                create_list.write(czas + " " + tytul+"\n")
             with open("tasks/" + self.user.lower() + "/tasks_list/" + tytul + ".txt", "a") as make_list:
                 while i != ilosc:
                     poz = str(input("Wpisz zadanie (jeszcze " + str(ilosc - i) + "): "))
-                    make_list.write(poz+" (Niezrobione) "+"\n")
+                    make_list.write(poz+"\n")
                     i += 1
             print("Lista stworzona!")
 
-    def wyswietl_liste_zadan(self):
+    def wyswietl_liste_zadan(self):  # Proste wyświetlenie konkretnego pliku (jego zawartości)
         if os.path.exists("tasks/"+self.user.lower()+"/tasks_list"):
             listy = os.listdir("tasks/" + self.user.lower() + "/tasks_list")
             print("Twoje listy zadań: ")
             print(listy)
-            wybor = str(input("Wpisz nazwę listy do wyświetlenia (bez .txt): "))
-            if os.path.exists("tasks/"+self.user.lower()+"/tasks_list/"+wybor+".txt"):
-                with open("tasks/"+self.user.lower()+"/tasks_list/"+wybor+".txt", "r") as read_list:
+            nazwa_listy = str(input("Wpisz nazwę listy do wyświetlenia (bez .txt): "))
+            if os.path.exists("tasks/"+self.user.lower()+"/tasks_list/"+nazwa_listy+".txt"):
+                with open("tasks/"+self.user.lower()+"/tasks_list/"+nazwa_listy+".txt", "r") as read_list:
                     for line in read_list:
                         print(line.rstrip())
             else:
@@ -494,29 +513,33 @@ class Organizer:  # Użyłem klasy tylko dlatego, że mogę odnosić się do dow
         else:
             print("Brak list rzeczy!")
 
-    def usun_liste_zadan(self):
+    def usun_liste_zadan(self):  # Usuwa plik. Tyle.
         if os.path.exists("tasks/"+self.user.lower()+"/tasks_list"):
             listy = os.listdir("tasks/"+self.user.lower()+"/tasks_list")
             print("Twoje listy zadań: ")
             print(listy)
             wybor = str(input("Wpisz nazwę listy do usunięcia (bez.txt): "))
-            if os.path.exists("tasks/" + self.user.lower() + "/tasks_list/" + wybor + ".txt"):
-                os.remove("tasks/" + self.user.lower() + "/tasks_list/" + wybor + ".txt")
-                print("Lista zadań usunięta!")
-            else:
-                print("Nie ma takiej listy do usunięcia!")
+            check = str(input("Czy chcesz trwale usunąć listę zadań? [y]Tak, [n]Nie: "))
+            if check == "y" or check.lower() == "y":
+                if os.path.exists("tasks/" + self.user.lower() + "/tasks_list/" + wybor + ".txt"):
+                    os.remove("tasks/" + self.user.lower() + "/tasks_list/" + wybor + ".txt")
+                    print("Lista zadań usunięta!")
+                else:
+                    print("Nie ma takiej listy do usunięcia!")
 
-    def usun_liste_rzeczy(self):
+    def usun_liste_rzeczy(self):  # Usuwa plik. Tyle.
         if os.path.exists("notes/"+self.user.lower()+"/notes_list"):
             listy = os.listdir("tasks/" + self.user.lower() + "/notes_list")
             print("Twoje listy rzeczy: ")
             print(listy)
             wybor = str(input("Wpisz nazwę listy do usunięcia (bez.txt): "))
-            if os.path.exists("notes/" + self.user.lower() + "/notes_list/" + wybor + ".txt"):
-                os.remove("notes/" + self.user.lower() + "/notes_list/" + wybor + ".txt")
-                print("Lista zadań usunięta!")
-            else:
-                print("Nie ma takiej listy do usunięcia!")
+            check = str(input("Czy chcesz trwale usunąć wszystkie zadania? [y]Tak, [n]Nie: "))
+            if check == "y" or check.lower() == "y":
+                if os.path.exists("notes/" + self.user.lower() + "/notes_list/" + wybor + ".txt"):
+                    os.remove("notes/" + self.user.lower() + "/notes_list/" + wybor + ".txt")
+                    print("Lista zadań usunięta!")
+                else:
+                    print("Nie ma takiej listy do usunięcia!")
 
     def menu_modyfikuj(self):
         while True:
@@ -536,18 +559,67 @@ class Organizer:  # Użyłem klasy tylko dlatego, że mogę odnosić się do dow
             else:
                 print("Zły wybór")
 
-    def ukoncz_zadanie(self):
+    def ukoncz_zadanie(self):  # Dodaje coś a'la tag (Zrobione) do zadania. Przyda się później
         Organizer.wyswietl_zadania(self)
         wybor = str(input("Wybierz ukończone zadanie: "))
-        with open("tasks/"+self.user.lower()+"/%s.txt" % self.user.lower(), "r+") as readtask:
-            ukoncz = readtask.read().replace("(Aktywne)", "(Zrobione)")
-            # with open("tasks/"+self.user.lower()+"/%s.txt" % self.user.lower(), "w") as activatetask:
-            for lines in readtask:
-                if wybor in lines:
-                    readtask.write(ukoncz)
-                    print("Zadanie ukończone!")
-                else:
-                    print("Nie ma takiego zadania!")
+        with open("tasks/"+self.user.lower()+"/%s.txt" % self.user.lower(), "r") as readtask:
+            odczyt = readtask.readlines()  # Odczytuje wartości
+            with open("tasks/"+self.user.lower()+"/%s.txt" % self.user.lower(), "w") as activatetask:
+                for line in odczyt:
+                    if wybor in line:  # Szuka lini w pliku. Chyba wykorzystam to wyżej
+                        # Jedyny minus to fakt, że nie może być dwóch identycznych zadań w pliku
+                        # Dlatego też dodałem listy zadań
+                        activatetask.write(line.rstrip() + " (Zrobione)" + "\n")
+                        print("Zadanie ukończone!")
+                    else:
+                        activatetask.write(line)
+
+    """def ukoncz_liste(self):
+        Organizer.wyswietl_liste_zadan(self)
+        wybor2 = str(input("Podaj zadanie do ukończenia: "))
+        with open("tasks/"+self.user.lower()+"/tasks_list/"+nazwa_listy)
+    """
+
+    def menu_pomoc(self):
+        # Stwierdziłem że po co robić osobne funkcje z opisami i wstawiłem je normalnie do środka
+        while True:
+            wybor = str(input("Wybierz temat:"
+                              "[1]Notatki, "
+                              "[2]Zadania, "
+                              "[3]Listy rzeczy, "
+                              "[4]Listy zadań, "
+                              "[q]Wyjdź z pomocy: "))
+            if wybor == "1":
+                print("")
+                print("Opcja \"Notatki\" pozwala zapisywać, edytować i usuwać twoje notatki.")
+                print("W tym przypadku zachowuje się jak zapisana pojedyńcza myśl.")
+                print("Przydatna kiedy chcesz zapisać na szybko jedną rzecz")
+                print("")
+            elif wybor == "2":
+                print("")
+                print("Opcja \"Zadania\" pozwala zapisywać, edytować i usuwać twoje zadania.")
+                print("W tym przypadku zachowuje się jak zapisanie pojedyńczej czynności do zrobienia.")
+                print("Przydatna kiedy chcesz zapisać pojedyńcze zadanie do wykonania")
+                print("Każde zadanie ma swoją datę wykonania, którą możesz sprecyzować")
+                print("Dodatkowo menu \"Modyfikuj\" pozwala oznaczyć zadanie jako ukończone")
+                print("")
+            elif wybor == "3":
+                print("")
+                print("\"Listy rzeczy\" pozwalają zapisywać ciąg notatek w osobnym pliku")
+                print("Zachowują się dzięki temu jak np. listy zakupowe lub listy anime do obejrzenia")
+                print("Listy rzeczy można jedynie tworzyć i usuwać, lecz może to ulec zmianie w przyszłości")
+                print("")
+            elif wybor == "4":
+                print("")
+                print("\"Listy zadań\" pozwalają zapisywać ciąg zadań w osobnym pliku")
+                print("Zachowują się dzięki temu jak np. kroki do osiągnięcia celu lub listy kontrolne")
+                print("Listy zadań można jedynie tworzyć i usuwać, lecz może to ulec zmianie w przyszłości")
+                print("Każda z nich ma przypisaną datę ukończenia, którą możesz sprecyzować")
+                print("")
+            elif wybor.lower() == "q" or wybor == "q":
+                break
+            else:
+                print("Zły wybór!")
 
 
 Organizer().main()
