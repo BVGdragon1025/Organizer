@@ -551,9 +551,9 @@ class Organizer:  # Użyłem klasy tylko dlatego, że mogę odnosić się do dow
             if menu == "1":
                 Organizer.ukoncz_zadanie(self)
             elif menu == "2":
-                pass
+                Organizer.ukoncz_zadanie_lista(self)
             elif menu == "3":
-                pass
+                Organizer.ukoncz_liste(self)
             elif menu == "q" or menu.lower == "q":
                 break
             else:
@@ -574,11 +574,67 @@ class Organizer:  # Użyłem klasy tylko dlatego, że mogę odnosić się do dow
                     else:
                         activatetask.write(line)
 
-    """def ukoncz_liste(self):
-        Organizer.wyswietl_liste_zadan(self)
-        wybor2 = str(input("Podaj zadanie do ukończenia: "))
-        with open("tasks/"+self.user.lower()+"/tasks_list/"+nazwa_listy)
-    """
+    def ukoncz_liste(self):  # Ukończenie listy. Kod poniżej to lekka modyfikacja kodu z wyswietl_liste_zadan
+        # Ogólnie ma to sprawdzać czy zadania na liście są skończone. Jeśli tak - można skończyć listę.
+        # Jak nie - użytkownik dostaje informację ile zadań ma, a ile skończył
+        line_count = 0
+        count = 0
+        tag = "(Zrobione)"
+        if os.path.exists("tasks/"+self.user.lower()+"/tasks_list"):
+            listy = os.listdir("tasks/" + self.user.lower() + "/tasks_list")
+            print("Twoje listy zadań: ")
+            print(listy)
+            nazwa_listy = str(input("Wpisz nazwę listy do ukończenia (bez .txt): "))
+            if os.path.exists("tasks/"+self.user.lower()+"/tasks_list/"+nazwa_listy+".txt"):
+                with open("tasks/"+self.user.lower()+"/tasks_list/"+nazwa_listy+".txt", "r") as read_list:
+                    odczyt_zadan = read_list.readlines()
+                    for lines in odczyt_zadan:
+                        lines.splitlines()
+                        line_count += 1
+                        if tag in lines:
+                            count += 1
+                    # print(count, " ", line_count) Pomocnicze
+                    if count != (line_count-1):
+                        print("Zostało zadań do ukończenia: ", ((line_count - 1) - count))
+                    else:
+                        with open("tasks/"+self.user.lower()+"/tasks_list/"+nazwa_listy+".txt", "w") as write_line:
+                            for lines in odczyt_zadan:
+                                if nazwa_listy in lines:
+                                    write_line.write(lines.rstrip() + " (Zrobione)" + "\n")
+                                else:
+                                    write_line.write(lines.rstrip() + "\n")
+                        print("Lista zadań ukończona! Gratulacje!")
+            else:
+                print("Nie ma takiej listy!")
+        else:
+            print("Brak list zadań!")
+
+    def ukoncz_zadanie_lista(self):  # Ukończenie zadania z listy
+        # Zaimplementowałem ze względu na to wyżej
+        # Na ten moment użytkownik może edytować jedno zadanie na raz
+        tag = "(Zrobione)"
+        if os.path.exists("tasks/" + self.user.lower() + "/tasks_list"):
+            listy = os.listdir("tasks/" + self.user.lower() + "/tasks_list")
+            print("Twoje listy zadań: ")
+            print(listy)
+            nazwa_listy = str(input("Wpisz nazwę listy do modyfikacji (bez .txt): "))
+            if os.path.exists("tasks/" + self.user.lower() + "/tasks_list/" + nazwa_listy + ".txt"):
+                with open("tasks/" + self.user.lower() + "/tasks_list/" + nazwa_listy + ".txt", "r") as read_list:
+                    odczyt_zadan = read_list.readlines()
+                    for lines in odczyt_zadan:
+                        print(lines.rstrip())
+                    uk_zadanie = str(input("Wpisz które zadanie chcesz ukończyć: "))
+                    with open("tasks/" + self.user.lower() + "/tasks_list/" + nazwa_listy + ".txt", "w") as write_line:
+                        for lines in odczyt_zadan:
+                            if uk_zadanie in lines:
+                                write_line.write(lines.rstrip() + " " + tag + "\n")
+                            else:
+                                write_line.write(lines.rstrip() + "\n")
+                        print("Podzadanie oznaczone jako zrobione!")
+            else:
+                print("Nie ma takiej listy!")
+        else:
+            print("Brak list zadań!")
 
     def menu_pomoc(self):
         # Stwierdziłem że po co robić osobne funkcje z opisami i wstawiłem je normalnie do środka
