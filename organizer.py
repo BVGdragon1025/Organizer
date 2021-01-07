@@ -23,7 +23,7 @@ class Organizer:  # Użyłem klasy tylko dlatego, że mogę odnosić się do dow
                 Organizer.rejestracja(self)
             elif choice == "2":
                 Organizer.logowanie(self)
-            elif choice == "q" or choice.lower == "q":
+            elif choice == "q" or choice == "Q":
                 print("Żegnaj!")
                 break
             else:
@@ -41,11 +41,11 @@ class Organizer:  # Użyłem klasy tylko dlatego, że mogę odnosić się do dow
                 else:
                     with open("users.txt", "a") as addusers:  # Dodaje login i hasło w takim formacie do pliku
                         addusers.write(self.user.lower() + " " + self.psw + "\n")
-                        print("Użytkownik dodany!")
+                        print("Użytkownik dodany! Teraz możesz się zalogować!")
         else:  # Na wypaddek gdyby nie było pliku
             with open("users.txt", "x") as createusers:
                 createusers.write(self.user.lower() + " " + self.psw + "\n")
-                print("Użytkownik dodany!")
+                print("Użytkownik dodany! Teraz możesz się zalogować!")
 
     def logowanie(self):  # Sprawdza czy kombinacja loginu i hasła jest w pliku "users.txt"
         if os.path.exists("users.txt"):
@@ -74,8 +74,8 @@ class Organizer:  # Użyłem klasy tylko dlatego, że mogę odnosić się do dow
             elif choice2 == "2":
                 Organizer.menu_zadania(self)
             elif choice2 == "3":
-                Organizer.menu_pomoc(self)
-            elif choice2 == "q" or choice2.lower == "q":
+                Organizer.menu_pomoc()
+            elif choice2 == "q" or choice2 == "Q":
                 break
             else:
                 print("Zły wybór")
@@ -95,7 +95,7 @@ class Organizer:  # Użyłem klasy tylko dlatego, że mogę odnosić się do dow
                 Organizer.menu_usun_zadanie(self)
             elif menu2 == "4":
                 Organizer.menu_modyfikuj(self)
-            elif menu2 == "q" or menu2.lower == "q":
+            elif menu2 == "q" or menu2 == "Q":
                 break
             else:
                 print("Zły wybór!")
@@ -105,6 +105,7 @@ class Organizer:  # Użyłem klasy tylko dlatego, że mogę odnosić się do dow
             menu1 = str(input("Wybierz opcję: [1]Dodaj..., "
                               "[2]Wyświetl..., "
                               "[3]Usuń..., "
+                              "[4]Modyfikuj..., "
                               "[q]Wyjdź z menu: "))
             if menu1 == "1":
                 Organizer.menu_dodaj_notatke(self)
@@ -112,7 +113,9 @@ class Organizer:  # Użyłem klasy tylko dlatego, że mogę odnosić się do dow
                 Organizer.menu_wyswietl_notatke(self)
             elif menu1 == "3":
                 Organizer.menu_usun_notatke(self)
-            elif menu1 == "q" or menu1.lower == "q":
+            elif menu1 == "4":
+                Organizer.menu_modyfikuj2(self)
+            elif menu1 == "q" or menu1 == "Q":
                 break
             else:
                 print("Zły wybór!")
@@ -182,7 +185,7 @@ class Organizer:  # Użyłem klasy tylko dlatego, że mogę odnosić się do dow
                 for lines in readtasks:
                     print(lines.rstrip())  # Obcina puste linie powstałe przez "\n"
         else:
-            print("Brak notatek!")
+            print("Brak zadań!")
 
     def usun_wsz_zadania(self):  # Działanie jest proste:
         # Otwórz plik w trybie zapisu i zamknij go. Wszelkie dane zostaną nadpisane :)
@@ -294,6 +297,7 @@ class Organizer:  # Użyłem klasy tylko dlatego, że mogę odnosić się do dow
                              "[1]Utwórz zadanie, "
                              "[2]Utwórz kilka zadań, "
                              "[3]Utwórz listę zadań, "
+                             "[4]Dodaj podzadania do listy zadań, "
                              "[q]Wyjdź z menu: "))
             if menu == "1":
                 Organizer.dodaj_zadanie(self)
@@ -301,7 +305,9 @@ class Organizer:  # Użyłem klasy tylko dlatego, że mogę odnosić się do dow
                 Organizer.dodaj_zadania(self)
             elif menu == "3":
                 Organizer.lista_zadan(self)
-            elif menu == "q" or menu.lower() == "q":
+            elif menu == "4":
+                Organizer.dodaj_podzadania(self)
+            elif menu == "q" or menu == "Q":
                 break
             else:
                 print("Zły wybór!")
@@ -312,6 +318,7 @@ class Organizer:  # Użyłem klasy tylko dlatego, że mogę odnosić się do dow
                              "[1]Dodaj notatkę, "
                              "[2]Dodaj kilka notatek, "
                              "[3]Stwórz listę rzeczy, "
+                             "[4]Dodaj pozycje do listy rzeczy, "
                              "[q]Wyjdź z menu: "))
             if menu == "1":
                 Organizer.dodaj_notatke(self)
@@ -319,7 +326,9 @@ class Organizer:  # Użyłem klasy tylko dlatego, że mogę odnosić się do dow
                 Organizer.dodaj_notatki(self)
             elif menu == "3":
                 Organizer.lista_rzeczy(self)
-            elif menu == "q" or menu.lower == "q":
+            elif menu == "4":
+                Organizer.dodaj_pozycje(self)
+            elif menu == "q" or menu == "Q":
                 break
             else:
                 print("Zły wybór")
@@ -330,6 +339,8 @@ class Organizer:  # Użyłem klasy tylko dlatego, że mogę odnosić się do dow
                              "[1]Wyświetl zadania, "
                              "[2]Wyświetl listę zadań, "
                              "[3]Wyświetl zadania (od nadchodzących), "
+                             "[4]Wyświetl aktywne zadania, "
+                             "[5]Wyswietl ukończone zadania, "
                              "[q]Wyjdź z menu: "))
             if menu == "1":
                 Organizer.wyswietl_zadania(self)
@@ -338,10 +349,10 @@ class Organizer:  # Użyłem klasy tylko dlatego, że mogę odnosić się do dow
             elif menu == "3":
                 Organizer.sortowanie_zadan(self)
             elif menu == "4":
-                pass
+                Organizer.wyswietl_aktywne(self)
             elif menu == "5":
-                pass
-            elif menu == "q" or menu.lower == "q":
+                Organizer.wyswietl_ukonczone(self)
+            elif menu == "q" or menu == "Q":
                 break
             else:
                 print("Zły wybór")
@@ -356,7 +367,7 @@ class Organizer:  # Użyłem klasy tylko dlatego, że mogę odnosić się do dow
                 Organizer.wyswietl_notatki(self)
             elif menu == "2":
                 Organizer.wyswietl_liste_rzeczy(self)
-            elif menu == "q" or menu.lower == "q":
+            elif menu == "q" or menu == "Q":
                 break
             else:
                 print("Zły wybór")
@@ -379,8 +390,8 @@ class Organizer:  # Użyłem klasy tylko dlatego, że mogę odnosić się do dow
             elif menu == "4":
                 Organizer.usun_liste_zadan(self)
             elif menu == "5":
-                pass
-            elif menu == "q" or menu.lower == "q":
+                Organizer.usun_skonczone_zadania(self)
+            elif menu == "q" or menu == "Q":
                 break
             else:
                 print("Zły wybór")
@@ -401,7 +412,7 @@ class Organizer:  # Użyłem klasy tylko dlatego, że mogę odnosić się do dow
                 Organizer.usun_wsz_notatki(self)
             elif menu == "4":
                 Organizer.usun_liste_rzeczy(self)
-            elif menu == "q" or menu.lower == "q":
+            elif menu == "q" or menu == "Q":
                 break
             else:
                 print("Zły wybór")
@@ -483,6 +494,26 @@ class Organizer:  # Użyłem klasy tylko dlatego, że mogę odnosić się do dow
                     i += 1
             print("Lista stworzona!")
 
+    def wyswietl_ukonczone(self):
+        tag = "(Zrobione)"
+        if os.path.exists("tasks/"+self.user.lower()+"/%s.txt" % self.user.lower()):
+            with open("tasks/"+self.user.lower()+"/%s.txt" % self.user.lower(), "r") as readtasks:
+                for lines in readtasks:
+                    if tag in lines:
+                        print(lines.rstrip())  # Obcina puste linie powstałe przez "\n"
+        else:
+            print("Brak zadań!")
+
+    def wyswietl_aktywne(self):
+        tag = "(Zrobione)"
+        if os.path.exists("tasks/"+self.user.lower()+"/%s.txt" % self.user.lower()):
+            with open("tasks/"+self.user.lower()+"/%s.txt" % self.user.lower(), "r") as readtasks:
+                for lines in readtasks:
+                    if tag not in lines:
+                        print(lines.rstrip())  # Obcina puste linie powstałe przez "\n"
+        else:
+            print("Brak zadań!")
+
     def wyswietl_liste_zadan(self):  # Proste wyświetlenie konkretnego pliku (jego zawartości)
         if os.path.exists("tasks/"+self.user.lower()+"/tasks_list"):
             listy = os.listdir("tasks/" + self.user.lower() + "/tasks_list")
@@ -500,46 +531,55 @@ class Organizer:  # Użyłem klasy tylko dlatego, że mogę odnosić się do dow
 
     def wyswietl_liste_rzeczy(self):
         if os.path.exists("notes/"+self.user.lower()+"/notes_list"):
-            listy = os.listdir("tasks/" + self.user.lower() + "/notes_list")
-            print("Twoje listy rzeczy: ")
-            print(listy)
-            wybor = str(input("Wpisz nazwę listy do wyświetlenia (bez.txt): "))
-            if os.path.exists("notes/"+self.user.lower()+"/notes_list/"+wybor+".txt"):
-                with open("notes/"+self.user.lower()+"/notes_list/"+wybor+".txt", "r") as read_list:
-                    for line in read_list:
-                        print(line.rstrip())
+            listy = os.listdir("notes/" + self.user.lower() + "/notes_list")
+            if len(listy) == 0:
+                print("Brak list rzeczy!")
             else:
-                print("Nie ma takiej listy!")
+                print("Twoje listy rzeczy: ")
+                print(listy)
+                wybor = str(input("Wpisz nazwę listy do wyświetlenia (bez.txt): "))
+                if os.path.exists("notes/"+self.user.lower()+"/notes_list/"+wybor+".txt"):
+                    with open("notes/"+self.user.lower()+"/notes_list/"+wybor+".txt", "r") as read_list:
+                        for line in read_list:
+                            print(line.rstrip())
+                else:
+                    print("Nie ma takiej listy!")
         else:
             print("Brak list rzeczy!")
 
     def usun_liste_zadan(self):  # Usuwa plik. Tyle.
         if os.path.exists("tasks/"+self.user.lower()+"/tasks_list"):
             listy = os.listdir("tasks/"+self.user.lower()+"/tasks_list")
-            print("Twoje listy zadań: ")
-            print(listy)
-            wybor = str(input("Wpisz nazwę listy do usunięcia (bez.txt): "))
-            check = str(input("Czy chcesz trwale usunąć listę zadań? [y]Tak, [n]Nie: "))
-            if check == "y" or check.lower() == "y":
-                if os.path.exists("tasks/" + self.user.lower() + "/tasks_list/" + wybor + ".txt"):
-                    os.remove("tasks/" + self.user.lower() + "/tasks_list/" + wybor + ".txt")
-                    print("Lista zadań usunięta!")
-                else:
-                    print("Nie ma takiej listy do usunięcia!")
+            if len(listy) == 0:
+                print("Brak list zadań!")
+            else:
+                print("Twoje listy zadań: ")
+                print(listy)
+                wybor = str(input("Wpisz nazwę listy do usunięcia (bez.txt): "))
+                check = str(input("Czy chcesz trwale usunąć listę zadań? [y]Tak, [n]Nie: "))
+                if check == "y" or check.lower() == "y":
+                    if os.path.exists("tasks/" + self.user.lower() + "/tasks_list/" + wybor + ".txt"):
+                        os.remove("tasks/" + self.user.lower() + "/tasks_list/" + wybor + ".txt")
+                        print("Lista zadań usunięta!")
+                    else:
+                        print("Nie ma takiej listy do usunięcia!")
 
     def usun_liste_rzeczy(self):  # Usuwa plik. Tyle.
         if os.path.exists("notes/"+self.user.lower()+"/notes_list"):
-            listy = os.listdir("tasks/" + self.user.lower() + "/notes_list")
-            print("Twoje listy rzeczy: ")
-            print(listy)
-            wybor = str(input("Wpisz nazwę listy do usunięcia (bez.txt): "))
-            check = str(input("Czy chcesz trwale usunąć wszystkie zadania? [y]Tak, [n]Nie: "))
-            if check == "y" or check.lower() == "y":
-                if os.path.exists("notes/" + self.user.lower() + "/notes_list/" + wybor + ".txt"):
-                    os.remove("notes/" + self.user.lower() + "/notes_list/" + wybor + ".txt")
-                    print("Lista zadań usunięta!")
-                else:
-                    print("Nie ma takiej listy do usunięcia!")
+            listy = os.listdir("notes/" + self.user.lower() + "/notes_list")
+            if len(listy) == 0:
+                print("Brak list rzeczy!")
+            else:
+                print("Twoje listy rzeczy: ")
+                print(listy)
+                wybor = str(input("Wpisz nazwę listy do usunięcia (bez.txt): "))
+                check = str(input("Czy chcesz trwale usunąć wszystkie zadania? [y]Tak, [n]Nie: "))
+                if check == "y" or check.lower() == "y":
+                    if os.path.exists("notes/" + self.user.lower() + "/notes_list/" + wybor + ".txt"):
+                        os.remove("notes/" + self.user.lower() + "/notes_list/" + wybor + ".txt")
+                        print("Lista zadań usunięta!")
+                    else:
+                        print("Nie ma takiej listy do usunięcia!")
 
     def menu_modyfikuj(self):
         while True:
@@ -554,7 +594,19 @@ class Organizer:  # Użyłem klasy tylko dlatego, że mogę odnosić się do dow
                 Organizer.ukoncz_zadanie_lista(self)
             elif menu == "3":
                 Organizer.ukoncz_liste(self)
-            elif menu == "q" or menu.lower == "q":
+            elif menu == "q" or menu == "Q":
+                break
+            else:
+                print("Zły wybór")
+
+    def menu_modyfikuj2(self):
+        while True:
+            menu = str(input("Wybierz opcję: "
+                             "[1]Oznacz pozycję jako skreśloną, "
+                             "[q]Wyjdź z menu: "))
+            if menu == "1":
+                Organizer.oznacz_pozycje(self)
+            elif menu == "q" or menu == "Q":
                 break
             else:
                 print("Zły wybór")
@@ -574,6 +626,35 @@ class Organizer:  # Użyłem klasy tylko dlatego, że mogę odnosić się do dow
                     else:
                         activatetask.write(line)
 
+    def oznacz_pozycje(self):
+        tag = "(Tick)"
+        if os.path.exists("notes/" + self.user.lower() + "/notes_list"):
+            listy = os.listdir("notes/" + self.user.lower() + "/notes_list")
+            if len(listy) == 0:
+                print("Brak list rzeczy!")
+            else:
+                print("Twoje listy rzeczy: ")
+                print(listy)
+                nazwa_listy = str(input("Wpisz nazwę listy do modyfikacji (bez .txt): "))
+                if os.path.exists("notes/" + self.user.lower() + "/notes_list/" + nazwa_listy + ".txt"):
+                    with open("notes/" + self.user.lower() + "/notes_list/" + nazwa_listy + ".txt", "r") as read_list:
+                        odczyt_poz = read_list.readlines()
+                        for lines in odczyt_poz:
+                            print(lines.rstrip())
+                        sk_poz = str(input("Wpisz którą pozycję chcesz \"skreślić\": "))
+                        with open("notes/" + self.user.lower() + "/notes_list/" + nazwa_listy + ".txt", "w") as \
+                                write_line:
+                            for lines in odczyt_poz:
+                                if sk_poz in lines:
+                                    write_line.write(lines.rstrip() + " " + tag + "\n")
+                                else:
+                                    write_line.write(lines.rstrip() + "\n")
+                            print("Pozycja oznaczona jako skreślona!")
+                else:
+                    print("Nie ma takiej listy!")
+        else:
+            print("Brak list zadań!")
+
     def ukoncz_liste(self):  # Ukończenie listy. Kod poniżej to lekka modyfikacja kodu z wyswietl_liste_zadan
         # Ogólnie ma to sprawdzać czy zadania na liście są skończone. Jeśli tak - można skończyć listę.
         # Jak nie - użytkownik dostaje informację ile zadań ma, a ile skończył
@@ -582,30 +663,33 @@ class Organizer:  # Użyłem klasy tylko dlatego, że mogę odnosić się do dow
         tag = "(Zrobione)"
         if os.path.exists("tasks/"+self.user.lower()+"/tasks_list"):
             listy = os.listdir("tasks/" + self.user.lower() + "/tasks_list")
-            print("Twoje listy zadań: ")
-            print(listy)
-            nazwa_listy = str(input("Wpisz nazwę listy do ukończenia (bez .txt): "))
-            if os.path.exists("tasks/"+self.user.lower()+"/tasks_list/"+nazwa_listy+".txt"):
-                with open("tasks/"+self.user.lower()+"/tasks_list/"+nazwa_listy+".txt", "r") as read_list:
-                    odczyt_zadan = read_list.readlines()
-                    for lines in odczyt_zadan:
-                        lines.splitlines()
-                        line_count += 1
-                        if tag in lines:
-                            count += 1
-                    # print(count, " ", line_count) Pomocnicze
-                    if count != (line_count-1):
-                        print("Zostało zadań do ukończenia: ", ((line_count - 1) - count))
-                    else:
-                        with open("tasks/"+self.user.lower()+"/tasks_list/"+nazwa_listy+".txt", "w") as write_line:
-                            for lines in odczyt_zadan:
-                                if nazwa_listy in lines:
-                                    write_line.write(lines.rstrip() + " (Zrobione)" + "\n")
-                                else:
-                                    write_line.write(lines.rstrip() + "\n")
-                        print("Lista zadań ukończona! Gratulacje!")
+            if len(listy) == 0:
+                print("Brak list zadań!")
             else:
-                print("Nie ma takiej listy!")
+                print("Twoje listy zadań: ")
+                print(listy)
+                nazwa_listy = str(input("Wpisz nazwę listy do ukończenia (bez .txt): "))
+                if os.path.exists("tasks/"+self.user.lower()+"/tasks_list/"+nazwa_listy+".txt"):
+                    with open("tasks/"+self.user.lower()+"/tasks_list/"+nazwa_listy+".txt", "r") as read_list:
+                        odczyt_zadan = read_list.readlines()
+                        for lines in odczyt_zadan:
+                            lines.splitlines()
+                            line_count += 1
+                            if tag in lines:
+                                count += 1
+                        # print(count, " ", line_count) Pomocnicze
+                        if count != (line_count-1):
+                            print("Zostało zadań do ukończenia: ", ((line_count - 1) - count))
+                        else:
+                            with open("tasks/"+self.user.lower()+"/tasks_list/"+nazwa_listy+".txt", "w") as write_line:
+                                for lines in odczyt_zadan:
+                                    if nazwa_listy in lines:
+                                        write_line.write(lines.rstrip() + " (Zrobione)" + "\n")
+                                    else:
+                                        write_line.write(lines.rstrip() + "\n")
+                            print("Lista zadań ukończona! Gratulacje!")
+                else:
+                    print("Nie ma takiej listy!")
         else:
             print("Brak list zadań!")
 
@@ -615,28 +699,109 @@ class Organizer:  # Użyłem klasy tylko dlatego, że mogę odnosić się do dow
         tag = "(Zrobione)"
         if os.path.exists("tasks/" + self.user.lower() + "/tasks_list"):
             listy = os.listdir("tasks/" + self.user.lower() + "/tasks_list")
-            print("Twoje listy zadań: ")
-            print(listy)
-            nazwa_listy = str(input("Wpisz nazwę listy do modyfikacji (bez .txt): "))
-            if os.path.exists("tasks/" + self.user.lower() + "/tasks_list/" + nazwa_listy + ".txt"):
-                with open("tasks/" + self.user.lower() + "/tasks_list/" + nazwa_listy + ".txt", "r") as read_list:
-                    odczyt_zadan = read_list.readlines()
-                    for lines in odczyt_zadan:
-                        print(lines.rstrip())
-                    uk_zadanie = str(input("Wpisz które zadanie chcesz ukończyć: "))
-                    with open("tasks/" + self.user.lower() + "/tasks_list/" + nazwa_listy + ".txt", "w") as write_line:
-                        for lines in odczyt_zadan:
-                            if uk_zadanie in lines:
-                                write_line.write(lines.rstrip() + " " + tag + "\n")
-                            else:
-                                write_line.write(lines.rstrip() + "\n")
-                        print("Podzadanie oznaczone jako zrobione!")
+            if len(listy) == 0:
+                print("Brak list zadań!")
             else:
-                print("Nie ma takiej listy!")
+                print("Twoje listy zadań: ")
+                print(listy)
+                nazwa_listy = str(input("Wpisz nazwę listy do modyfikacji (bez .txt): "))
+                if os.path.exists("tasks/" + self.user.lower() + "/tasks_list/" + nazwa_listy + ".txt"):
+                    with open("tasks/" + self.user.lower() + "/tasks_list/" + nazwa_listy + ".txt", "r") as read_list:
+                        odczyt_zadan = read_list.readlines()
+                        for lines in odczyt_zadan:
+                            print(lines.rstrip())
+                        uk_zadanie = str(input("Wpisz które zadanie chcesz ukończyć: "))
+                        with open("tasks/" + self.user.lower() + "/tasks_list/" + nazwa_listy + ".txt", "w") as \
+                                write_line:
+                            for lines in odczyt_zadan:
+                                if uk_zadanie in lines:
+                                    write_line.write(lines.rstrip() + " " + tag + "\n")
+                                else:
+                                    write_line.write(lines.rstrip() + "\n")
+                            print("Podzadanie oznaczone jako zrobione!")
+                else:
+                    print("Nie ma takiej listy!")
         else:
             print("Brak list zadań!")
 
-    def menu_pomoc(self):
+    def usun_skonczone_zadania(self):  # Usuwa skończone zadania.
+        tag = "(Zrobione)"
+        print("")
+        print("Czy chcesz usunąć wszystkie ukończone zadania?")
+        print("Usunie to tylko pojedyńcze skończone zadania.")
+        choice = str(input("[y]Tak, [n]Nie: "))
+        if choice == "y" or choice.lower == "y":
+            if os.path.exists("tasks/"+self.user.lower()+"/"+self.user.lower()+".txt"):
+                with open("tasks/"+self.user.lower()+"/"+self.user.lower()+".txt", "r") as file_read:
+                    odczyt = file_read.readlines()
+                with open("tasks/"+self.user.lower()+"/"+self.user.lower()+".txt", "w") as write_line:
+                    for lines in odczyt:
+                        if tag not in lines:
+                            write_line.write(lines.rstrip() + "\n")
+                print("Ukończone zadania zostały usunięte!")
+            else:
+                print("Brak zadań!")
+
+    def dodaj_podzadania(self):  # dodaje podzadania do listy zadań.
+        # Zawiera dodatkową funkcję sprawdzania, czy lista jest zrobiona.
+        # Jeśli tak, użytkownik nie może dodać zadania, bo by to nie miało sensu.
+        i = 0
+        tag = "(Zrobione)"
+        if os.path.exists("tasks/" + self.user.lower() + "/tasks_list"):
+            listy = os.listdir("tasks/" + self.user.lower() + "/tasks_list")
+            if len(listy) == 0:
+                print("Brak list zadań!")
+            else:
+                print("Twoje listy zadań: ")
+                print(listy)
+                nazwa_listy = str(input("Wpisz nazwę listy do modyfikacji (bez .txt): "))
+                if os.path.exists("tasks/" + self.user.lower() + "/tasks_list/"+nazwa_listy+".txt"):
+                    with open("tasks/" + self.user.lower() + "/tasks_list/"+nazwa_listy+".txt", "r") as read_file:
+                        odczyt = read_file.readline()
+                        if tag in odczyt:
+                            print("To zadanie jest ukończone! Nie możesz do niego dodawać podzadań!")
+                        else:
+                            print("Podzadania są dodawane na koniec kolejki!")
+                            ile = int(input("Ile podzadań chcesz dodać (numerycznie): "))
+                            while i != ile:
+                                podzadanie = str(input("Wpisz podzadanie (jeszcze "+str(ile-i)+"): "))
+                                with open("tasks/" + self.user.lower() + "/tasks_list/"+nazwa_listy+".txt", "a") \
+                                        as add_task:
+                                    add_task.write(podzadanie+"\n")
+                                    print("Podzadanie dodane!")
+                                i += 1
+                else:
+                    print("Nie ma takiej listy!")
+        else:
+            print("Brak list zadań!")
+
+    def dodaj_pozycje(self):  # Analogicznie do tego, co wyżej, ale bez sprawdzania skończenia listy
+        # Bo listy rzeczy nie można "zrobić" według narzuconej w tym programie logiki.
+        i = 0
+        if os.path.exists("notes/" + self.user.lower() + "/notes_list"):
+            listy = os.listdir("notes/" + self.user.lower() + "/notes_list")
+            if len(listy) == 0:
+                print("Brak list rzeczy!")
+            else:
+                print("Twoje listy rzeczy: ")
+                print(listy)
+                nazwa_listy = str(input("Wpisz nazwę listy do modyfikacji (bez .txt): "))
+                if os.path.exists("notes/" + self.user.lower() + "/notes_list/"+nazwa_listy+".txt"):
+                    print("Pozycje są dodawane na koniec kolejki!")
+                    ile = int(input("Ile pozycji chcesz dodać (numerycznie): "))
+                    while i != ile:
+                        pozycje = str(input("Wpisz coś (jeszcze "+str(ile-i)+"): "))
+                        with open("notes/" + self.user.lower() + "/notes_list/"+nazwa_listy+".txt", "a") as add_note:
+                            add_note.write(pozycje+"\n")
+                            print("Pozycja dodana!")
+                        i += 1
+                else:
+                    print("Nie ma takiej listy!")
+        else:
+            print("Brak list zadań!")
+
+    @staticmethod
+    def menu_pomoc():
         # Stwierdziłem że po co robić osobne funkcje z opisami i wstawiłem je normalnie do środka
         while True:
             wybor = str(input("Wybierz temat:"
@@ -663,14 +828,20 @@ class Organizer:  # Użyłem klasy tylko dlatego, że mogę odnosić się do dow
                 print("")
                 print("\"Listy rzeczy\" pozwalają zapisywać ciąg notatek w osobnym pliku")
                 print("Zachowują się dzięki temu jak np. listy zakupowe lub listy anime do obejrzenia")
-                print("Listy rzeczy można jedynie tworzyć i usuwać, lecz może to ulec zmianie w przyszłości")
+                print("Listy rzeczy można tworzyć, usuwać i dodawać do nich\"pozycje\"")
+                print("Każda nowa pozycja jest dodawana na koniec listy.")
+                print("Uwaga! Pozycji nie można usuwać! Można jedynie dodawać przy nich tag \"(Tick)\"")
+                print("Tag \"(Tick)\" jest równoznaczny z skreśleniem pozycji z listy.")
                 print("")
             elif wybor == "4":
                 print("")
                 print("\"Listy zadań\" pozwalają zapisywać ciąg zadań w osobnym pliku")
                 print("Zachowują się dzięki temu jak np. kroki do osiągnięcia celu lub listy kontrolne")
-                print("Listy zadań można jedynie tworzyć i usuwać, lecz może to ulec zmianie w przyszłości")
+                print("Listy zadań można jedynie tworzyć, usuwać, i dodawać  do nich \"podzadania\"")
                 print("Każda z nich ma przypisaną datę ukończenia, którą możesz sprecyzować ")
+                print("Dodatkowo możesz oznaczyć podzadania jako skończone.")
+                print("Jeśli wszystkie podzadania zostaną ukończone, możesz oznaczyć listę zadań jako skończoną.")
+                print("Uwaga! Nie można usuwać podzadań! Można oznaczać je tylko jako skończone!")
                 print("")
             elif wybor.lower() == "q" or wybor == "q":
                 break
