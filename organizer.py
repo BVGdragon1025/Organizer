@@ -8,13 +8,17 @@ import os  # Przydatne do paru rzeczy :)
 
 
 class Organizer:  # Użyłem klasy tylko dlatego, że mogę odnosić się do dowolnej funkcji kiedy tylko chcę
-
     def __init__(self):  # Użyłem tego tylko dlatego, by móc odnosić się do nazwy użytkownika.
         # To było najprostrze rozwiązanie dla mnie
+        """user = str(input("Podaj nazwę użytkownika: "))
+        psw = str(input("Podaj hasło: "))"""
+        self.user = Organizer.user_input(self)[0]
+        self.psw = Organizer.user_input(self)[1]
+
+    def user_input(self):
         user = str(input("Podaj nazwę użytkownika: "))
         psw = str(input("Podaj hasło: "))
-        self.user = user
-        self.psw = psw
+        return user, psw
 
     def main(self):  # Główne menu, które powinno sie pojawiać najpierw, ale zrobiłem to coś na górze :)
         while True:
@@ -29,7 +33,7 @@ class Organizer:  # Użyłem klasy tylko dlatego, że mogę odnosić się do dow
             else:
                 print("Zły wybór!")
 
-    def rejestracja(self):  # Zapisuje login i hasło do pliku "users.txt"
+    def rejestracja(self,):  # Zapisuje login i hasło do pliku "users.txt"
         #  Na ten moment jest to kompletnie nie szyfrowane :)
         if os.path.exists("users.txt"):
             with open("users.txt", "r") as users:  # Zamiast users = file.open("users.txt", "r")
@@ -566,6 +570,8 @@ class Organizer:  # Użyłem klasy tylko dlatego, że mogę odnosić się do dow
                         print("Lista zadań usunięta!")
                     else:
                         print("Nie ma takiej listy do usunięcia!")
+                else:
+                    print("Usunięcie anulowane!")
 
     def usun_liste_rzeczy(self):  # Usuwa plik. Tyle.
         if os.path.exists("notes/" + self.user.lower() + "/notes_list"):
@@ -583,6 +589,8 @@ class Organizer:  # Użyłem klasy tylko dlatego, że mogę odnosić się do dow
                         print("Lista zadań usunięta!")
                     else:
                         print("Nie ma takiej listy do usunięcia!")
+                else:
+                    print("Usunięcie anulowane!")
 
     def menu_modyfikuj(self):
         while True:
@@ -745,6 +753,8 @@ class Organizer:  # Użyłem klasy tylko dlatego, że mogę odnosić się do dow
                 print("Ukończone zadania zostały usunięte!")
             else:
                 print("Brak zadań!")
+        else:
+            print("Usunięcie anulowane!")
 
     def dodaj_podzadania(self):  # dodaje podzadania do listy zadań.
         # Zawiera dodatkową funkcję sprawdzania, czy lista jest zrobiona.
