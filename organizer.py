@@ -22,19 +22,18 @@ def login():
         with open("user.txt", "r") as user_check:
             read_user = user_check.readline().strip()
             temp.append(read_user)
-            print("Witaj,", read_user.capitalize(), "!")
     else:
         print("Witaj, Użytkowniku! Widzimy się pierwszy raz!")
         user_name = str(input("Wpisz proszę, jak mamy cię nazywać?: "))
         with open("user.txt", "x") as create_user:
             create_user.write(user_name.lower())
             temp.append(user_name)
-            print("Witaj, ", user_name, "!")
 
     return temp
 
 
 def wybor_opcji(temp):  # Wybór opcji.
+    print("Witaj,", temp[0].capitalize(), "!")
     while True:
         choice2 = str(input("Wybierz którą kategorię chcesz wybrać: "
                             "[1]Notatki, "
@@ -130,7 +129,7 @@ def dodaj_zadanie():  # Dodaje zadanie do pliku.
                 addtask.write(data + " " + zadanie + "\n")
                 print("Zadanie dodane!")
         else:
-            with open("tasks/tasks.txt" "x") as addtask:
+            with open("tasks/tasks.txt", "x") as addtask:
                 addtask.write(data + " " + zadanie + "\n")
                 print("Zadanie dodane!")
     else:
