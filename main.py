@@ -44,8 +44,11 @@ else:
 
 
 class Main:
-    def __init__(self, username, password):
+    def __init__(self, username, password, title, exp_date):
         self.username = username
         self.password = password
+        self.title = title
+        self.exp_date = exp_date
+
 
 
