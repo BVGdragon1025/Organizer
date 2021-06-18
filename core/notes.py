@@ -5,7 +5,7 @@ conn = sqlite3.connect("organizer.db")
 
 
 class Notes:
-    def __init__(self,note):
+    def __init__(self, note):
         self.note = note
 
     def test(self):

@@ -51,8 +51,7 @@ class Main:
         self.password = password
 
     def login(self):
-        table_check = cursor.execute("SELECT count(*) FROM users LIMIT 1; ")
-        print(table_check.fetchone())
+        table_check = cursor.execute("SELECT * FROM users ; ")
         if table_check.fetchone() is None:
             print("Witaj w Organizerze! Jesteś nowym użytkownikiem, więc poproszę cię o parę rzeczy")
             self.username = input("Jak chcesz się nazywać?: ")
@@ -65,14 +64,24 @@ class Main:
                 else:
                     break
             print(f"Witaj, {self.username}!")
-            conn.execute(f"INSERT INTO users (username, password) VALUES ('{self.username}, {self.password});")
+            conn.execute(f"INSERT INTO users (username, password) VALUES ('{self.username}', '{self.password}');")
             conn.commit()
-        else:
+        elif table_check.fetchall() is not None:
             print("Witaj ponownie!")
             self.username = input("Podaj swoją nazwę (login): ")
             self.password = input("Podaj swoje hasło: ")
-            conn.execute(f"SELECT * FROM users WHERE username = {self.username} AND password = {self.password}")
-            print(f"Witamy ponownie, {self.username}")
+            while True:
+                user_check = conn.execute(
+                    f"SELECT * FROM `users` WHERE username = '{self.username}' AND password = '{self.password}';")
+                if user_check.fetchone() is not None:
+                    print(f"Witamy ponownie, {self.username}")
+                    break
+                else:
+                    print("Brak takiego użytkownika, spróbuj jeszcze raz")
+                    self.username = input("Podaj swoją nazwę (login): ")
+                    self.password = input("Podaj swoje hasło: ")
+        else:
+            print("Błąd")
 
     def test(self):
         print("Działa")
