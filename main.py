@@ -72,9 +72,12 @@ class Main:
             self.password = input("Podaj swoje hasło: ")
             while True:
                 user_check = conn.execute(
-                    f"SELECT * FROM `users` WHERE username = '{self.username}' AND password = '{self.password}';")
+                    f"SELECT username, password FROM `users` "
+                    f"WHERE username = '{self.username}' AND password = '{self.password}';"
+                )
                 if user_check.fetchone() is not None:
                     print(f"Witamy ponownie, {self.username}")
+                    Main.menu(self)
                     break
                 else:
                     print("Brak takiego użytkownika, spróbuj jeszcze raz")
@@ -83,14 +86,26 @@ class Main:
         else:
             print("Błąd")
 
+    def menu(self):
+        while True:
+            print("Gdzie chciałbyś teraz się przenieść?\n"
+                  "[1]Notatki, \n"
+                  "[2]Zadania, \n"
+                  "[q]Wyjść \n")
+            choice = input("Wybierz: ")
+            if choice == "1":
+                notes.Notes.menu(notes.Notes)
+            elif choice == "2":
+                pass
+            elif choice == "q" or choice.lower() == "q":
+                print(f"Żegnaj, {self.username}!")
+                conn.close()
+                break
+
     def test(self):
         print("Działa")
 
 
 Main.login(Main)
-notes.Notes.test(notes.Notes)
+
 tasks.Tasks.test(tasks.Tasks)
-
-
-
-

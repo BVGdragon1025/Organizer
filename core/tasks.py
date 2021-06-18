@@ -1,5 +1,4 @@
 import sqlite3
-import os
 
 conn = sqlite3.connect("organizer.db")
 
