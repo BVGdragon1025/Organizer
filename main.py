@@ -14,7 +14,7 @@ if not os.path.exists("organizer.db"):
         conn.commit()
         conn.execute("CREATE TABLE tasks("
                      "id INTEGER NOT NULL,"
-                     "title TEXT NOT NULL,"
+                     "task TEXT NOT NULL,"
                      "exp_date TEXT NOT NULL,"
                      "PRIMARY KEY (id AUTOINCREMENT));")
         conn.commit()
@@ -66,6 +66,7 @@ class Main:
             print(f"Witaj, {self.username}!")
             conn.execute(f"INSERT INTO users (username, password) VALUES ('{self.username}', '{self.password}');")
             conn.commit()
+            Main.menu(self)
         elif table_check.fetchall() is not None:
             print("Witaj ponownie!")
             self.username = input("Podaj swoją nazwę (login): ")
@@ -96,7 +97,7 @@ class Main:
             if choice == "1":
                 notes.Notes.menu(notes.Notes)
             elif choice == "2":
-                pass
+                tasks.Tasks.menu(tasks.Tasks)
             elif choice == "q" or choice.lower() == "q":
                 print(f"Żegnaj, {self.username}!")
                 conn.close()
@@ -108,4 +109,3 @@ class Main:
 
 Main.login(Main)
 
-tasks.Tasks.test(tasks.Tasks)
