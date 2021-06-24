@@ -98,7 +98,7 @@ class Main:
                   "[q]Wyjść \n")
             choice = input("Wybierz: ")
             if choice == "1":
-                notes.Notes.menu(notes.Notes)
+                notes.Notes.menu(notes.Notes, self.username)
             elif choice == "2":
                 tasks.Tasks.menu(tasks.Tasks)
             elif choice == "q" or choice.lower() == "q":

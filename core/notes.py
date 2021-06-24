@@ -1,7 +1,4 @@
 import sqlite3
-import main
-
-import organizer
 
 conn = sqlite3.connect("organizer.db")
 
@@ -19,14 +16,14 @@ class Notes:
         conn.commit()
         print("Notatka zapisana!\n")
 
-    def show_notes(self):
+    def show_notes(self, username):
         cursor = conn.execute(f"SELECT * FROM notes;")
         for row in cursor.fetchall():
             print(row)
         print("\n")
 
-    def delete_notes(self):
-        Notes.show_notes(self)
+    def delete_notes(self, username):
+        Notes.show_notes(self, username)
         note_del_id = input("Wpisz numer notatki do usunięcia: ")
         confirm = input(f'Czy na pewno chcesz usunąć notatkę z numerem "{note_del_id}"? [y]Tak, [n]Nie: ')
         if confirm.lower() == "y" or confirm == "y":
@@ -38,8 +35,8 @@ class Notes:
         elif confirm.lower() == "n" or confirm == "n":
             print("Usuwanie przerwane! W ostatniej chwili!\n")
 
-    def delete_all_notes(self):
-        Notes.show_notes(self)
+    def delete_all_notes(self, username):
+        Notes.show_notes(self,username)
         choice = input("Czy na pewno chcesz usunąć WSZYSTKIE notatki?\n"
                        "Operacji tej nie da się cofnąć!\n"
                        "[y]Tak, [n]Nie: ")
@@ -52,7 +49,7 @@ class Notes:
         elif choice == "n" or choice.lower() == "n":
             print("Usunięcie anulowane! W ostatniej chwili!\n")
 
-    def menu(self):
+    def menu(self, username):
         while True:
             print("Wybierz co chcesz zrobić:\n"
                   "[1]Dodać notatkę,\n"
@@ -62,13 +59,13 @@ class Notes:
                   "[q]Wyjść\n")
             choice = input("Wybierz: ")
             if choice == "1":
-                Notes.add_note(self, main.Main.login(main.Main))
+                Notes.add_note(self, username)
             elif choice == "2":
-                Notes.show_notes(self)
+                Notes.show_notes(self, username)
             elif choice == "3":
-                Notes.delete_notes(self)
+                Notes.delete_notes(self, username)
             elif choice == "4":
-                Notes.delete_all_notes(self)
+                Notes.delete_all_notes(self, username)
             elif choice == "q" or choice.lower == "q":
                 break
             else:
