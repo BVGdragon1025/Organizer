@@ -17,7 +17,7 @@ class Notes:
         print("Notatka zapisana!\n")
 
     def show_notes(self, username):
-        cursor = conn.execute(f"SELECT * FROM notes;")
+        cursor = conn.execute(f"SELECT * FROM notes,users WHERE username={username};")
         for row in cursor.fetchall():
             print(row)
         print("\n")

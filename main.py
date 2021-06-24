@@ -8,42 +8,44 @@ cursor = conn.cursor()
 if not os.path.exists("organizer.db"):
     with conn:
         conn.execute('CREATE TABLE "notes"('
-                     '"id" INTEGER NOT NULL, '
+                     '"note_id" INTEGER NOT NULL, '
                      '"title" TEXT NOT NULL, '
                      '"user" INTEGER NOT NULL, '
                      'PRIMARY KEY ("id" AUTOINCREMENT)),'
                      'FOREIGN KEY ("user") REFERENCES "users"("id") ON DELETE CASCADE);')
         conn.commit()
         conn.execute('CREATE TABLE "tasks"('
-                     '"id" INTEGER NOT NULL,'
+                     '"task_id" INTEGER NOT NULL,'
                      '"task" TEXT NOT NULL,'
                      '"exp_date" TEXT NOT NULL,'
                      'PRIMARY KEY ("id" AUTOINCREMENT));')
         conn.commit()
         conn.execute('CREATE TABLE "users"('
-                     '"id" INTEGER NOT NULL,'
+                     '"user_id" INTEGER NOT NULL,'
                      '"username" TEXT NOT NULL UNIQUE,'
                      '"password" TEXT NOT NULL,'
                      'PRIMARY KEY("id" AUTOINCREMENT));')
         conn.commit()
 else:
     with conn:
-        conn.execute("CREATE TABLE IF NOT EXISTS notes("
-                     "id INTEGER NOT NULL, "
-                     "note TEXT NOT NULL, "
-                     "PRIMARY KEY (id AUTOINCREMENT));")
+        conn.execute('CREATE TABLE "notes"('
+                     '"note_id" INTEGER NOT NULL, '
+                     '"title" TEXT NOT NULL, '
+                     '"user" INTEGER NOT NULL, '
+                     'PRIMARY KEY ("id" AUTOINCREMENT)),'
+                     'FOREIGN KEY ("user") REFERENCES "users"("id") ON DELETE CASCADE);')
         conn.commit()
-        conn.execute("CREATE TABLE IF NOT EXISTS tasks("
-                     "id INTEGER NOT NULL,"
-                     "task TEXT NOT NULL,"
-                     "exp_date TEXT NOT NULL,"
-                     "PRIMARY KEY (id AUTOINCREMENT));")
+        conn.execute('CREATE TABLE "tasks"('
+                     '"task_id" INTEGER NOT NULL,'
+                     '"task" TEXT NOT NULL,'
+                     '"exp_date" TEXT NOT NULL,'
+                     'PRIMARY KEY ("id" AUTOINCREMENT));')
         conn.commit()
-        conn.execute("CREATE TABLE IF NOT EXISTS users("
-                     "id INTEGER NOT NULL,"
-                     "username TEXT NOT NULL,"
-                     "password TEXT NOT NULL,"
-                     "PRIMARY KEY(id AUTOINCREMENT));")
+        conn.execute('CREATE TABLE "users"('
+                     '"user_id" INTEGER NOT NULL,'
+                     '"username" TEXT NOT NULL UNIQUE,'
+                     '"password" TEXT NOT NULL,'
+                     'PRIMARY KEY("id" AUTOINCREMENT));')
         conn.commit()
 
 
