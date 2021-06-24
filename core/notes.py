@@ -1,4 +1,7 @@
 import sqlite3
+import main
+
+import organizer
 
 conn = sqlite3.connect("organizer.db")
 
@@ -7,10 +10,11 @@ class Notes:
     def __init__(self, note):
         self.note = note
 
-    def add_note(self):
-        self.note = input("Co chesz zapisać?: ")
+    def add_note(self, username):
+        self.note = input("Co chcesz zapisać?: ")
         conn.execute(
-            f"INSERT INTO notes (note) VALUES('{self.note}');"
+            f"INSERT INTO notes (note,user) VALUES('{self.note}',"
+            f"(SELECT id FROM users WHERE username='{username}'));"
         )
         conn.commit()
         print("Notatka zapisana!\n")
@@ -58,7 +62,7 @@ class Notes:
                   "[q]Wyjść\n")
             choice = input("Wybierz: ")
             if choice == "1":
-                Notes.add_note(self)
+                Notes.add_note(self, main.Main.login(main.Main))
             elif choice == "2":
                 Notes.show_notes(self)
             elif choice == "3":

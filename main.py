@@ -1,28 +1,30 @@
 ﻿import sqlite3
 import os
-from core import notes, tasks
+from core import notes, tasks, notes_list, tasks_list
 
 conn = sqlite3.connect("organizer.db")
 cursor = conn.cursor()
 
 if not os.path.exists("organizer.db"):
     with conn:
-        conn.execute("CREATE TABLE notes("
-                     "id INTEGER NOT NULL, "
-                     "title TEXT NOT NULL, "
-                     "PRIMARY KEY (id AUTOINCREMENT));")
+        conn.execute('CREATE TABLE "notes"('
+                     '"id" INTEGER NOT NULL, '
+                     '"title" TEXT NOT NULL, '
+                     '"user" INTEGER NOT NULL, '
+                     'PRIMARY KEY ("id" AUTOINCREMENT)),'
+                     'FOREIGN KEY ("user") REFERENCES "users"("id") ON DELETE CASCADE);')
         conn.commit()
-        conn.execute("CREATE TABLE tasks("
-                     "id INTEGER NOT NULL,"
-                     "task TEXT NOT NULL,"
-                     "exp_date TEXT NOT NULL,"
-                     "PRIMARY KEY (id AUTOINCREMENT));")
+        conn.execute('CREATE TABLE "tasks"('
+                     '"id" INTEGER NOT NULL,'
+                     '"task" TEXT NOT NULL,'
+                     '"exp_date" TEXT NOT NULL,'
+                     'PRIMARY KEY ("id" AUTOINCREMENT));')
         conn.commit()
-        conn.execute("CREATE TABLE users("
-                     "id INTEGER NOT NULL,"
-                     "username TEXT NOT NULL,"
-                     "password TEXT NOT NULL,"
-                     "PRIMARY KEY(id AUTOINCREMENT));")
+        conn.execute('CREATE TABLE "users"('
+                     '"id" INTEGER NOT NULL,'
+                     '"username" TEXT NOT NULL UNIQUE,'
+                     '"password" TEXT NOT NULL,'
+                     'PRIMARY KEY("id" AUTOINCREMENT));')
         conn.commit()
 else:
     with conn:
@@ -86,6 +88,7 @@ class Main:
                     self.password = input("Podaj swoje hasło: ")
         else:
             print("Błąd")
+        return self.username
 
     def menu(self):
         while True:
