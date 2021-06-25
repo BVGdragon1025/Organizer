@@ -7,45 +7,49 @@ cursor = conn.cursor()
 
 if not os.path.exists("organizer.db"):
     with conn:
+        conn.execute('CREATE TABLE "users"('
+                     '"user_id" INTEGER NOT NULL,'
+                     '"username" TEXT NOT NULL UNIQUE,'
+                     '"password" TEXT NOT NULL,'
+                     'PRIMARY KEY("user_id" AUTOINCREMENT));')
+        conn.commit()
         conn.execute('CREATE TABLE "notes"('
-                     '"note_id" INTEGER NOT NULL, '
-                     '"title" TEXT NOT NULL, '
-                     '"user" INTEGER NOT NULL, '
-                     'PRIMARY KEY ("id" AUTOINCREMENT)),'
-                     'FOREIGN KEY ("user") REFERENCES "users"("id") ON DELETE CASCADE);')
+                     '"note_id" INTEGER NOT NULL,'
+                     '"note" TEXT NOT NULL,'
+                     '"user" INTEGER NOT NULL,'
+                     'PRIMARY KEY ("note_id" AUTOINCREMENT),'
+                     'FOREIGN KEY ("user") REFERENCES "users"("user_id") ON DELETE CASCADE);')
         conn.commit()
         conn.execute('CREATE TABLE "tasks"('
                      '"task_id" INTEGER NOT NULL,'
                      '"task" TEXT NOT NULL,'
                      '"exp_date" TEXT NOT NULL,'
-                     'PRIMARY KEY ("id" AUTOINCREMENT));')
-        conn.commit()
-        conn.execute('CREATE TABLE "users"('
-                     '"user_id" INTEGER NOT NULL,'
-                     '"username" TEXT NOT NULL UNIQUE,'
-                     '"password" TEXT NOT NULL,'
-                     'PRIMARY KEY("id" AUTOINCREMENT));')
+                     '"user" INTEGER NOT NULL,'
+                     'PRIMARY KEY ("task_id" AUTOINCREMENT),'
+                     'FOREIGN KEY ("user") REFERENCES "users"("user_id") ON DELETE CASCADE);')
         conn.commit()
 else:
     with conn:
-        conn.execute('CREATE TABLE "notes"('
-                     '"note_id" INTEGER NOT NULL, '
-                     '"title" TEXT NOT NULL, '
-                     '"user" INTEGER NOT NULL, '
-                     'PRIMARY KEY ("id" AUTOINCREMENT)),'
-                     'FOREIGN KEY ("user") REFERENCES "users"("id") ON DELETE CASCADE);')
-        conn.commit()
-        conn.execute('CREATE TABLE "tasks"('
-                     '"task_id" INTEGER NOT NULL,'
-                     '"task" TEXT NOT NULL,'
-                     '"exp_date" TEXT NOT NULL,'
-                     'PRIMARY KEY ("id" AUTOINCREMENT));')
-        conn.commit()
-        conn.execute('CREATE TABLE "users"('
+        conn.execute('CREATE TABLE IF NOT EXISTS"users"('
                      '"user_id" INTEGER NOT NULL,'
                      '"username" TEXT NOT NULL UNIQUE,'
                      '"password" TEXT NOT NULL,'
-                     'PRIMARY KEY("id" AUTOINCREMENT));')
+                     'PRIMARY KEY("user_id" AUTOINCREMENT));')
+        conn.commit()
+        conn.execute('CREATE TABLE IF NOT EXISTS "notes"('
+                     '"note_id" INTEGER NOT NULL,'
+                     '"note" TEXT NOT NULL,'
+                     '"user" INTEGER NOT NULL,'
+                     'PRIMARY KEY ("note_id" AUTOINCREMENT),'
+                     'FOREIGN KEY ("user") REFERENCES "users"("user_id") ON DELETE CASCADE);')
+        conn.commit()
+        conn.execute('CREATE TABLE IF NOT EXISTS "tasks"('
+                     '"task_id" INTEGER NOT NULL,'
+                     '"task" TEXT NOT NULL,'
+                     '"exp_date" TEXT NOT NULL,'
+                     '"user" INTEGER NOT NULL,'
+                     'PRIMARY KEY ("task_id" AUTOINCREMENT),'
+                     'FOREIGN KEY ("user") REFERENCES "users"("user_id") ON DELETE CASCADE);')
         conn.commit()
 
 
@@ -102,7 +106,7 @@ class Main:
             if choice == "1":
                 notes.Notes.menu(notes.Notes, self.username)
             elif choice == "2":
-                tasks.Tasks.menu(tasks.Tasks)
+                tasks.Tasks.menu(tasks.Tasks, self.username)
             elif choice == "q" or choice.lower() == "q":
                 print(f"Żegnaj, {self.username}!")
                 conn.close()
