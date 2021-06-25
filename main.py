@@ -28,6 +28,37 @@ if not os.path.exists("organizer.db"):
                      'PRIMARY KEY ("task_id" AUTOINCREMENT),'
                      'FOREIGN KEY ("user") REFERENCES "users"("user_id") ON DELETE CASCADE);')
         conn.commit()
+        conn.execute('CREATE TABLE "notes_list"('
+                     '"nlist_id" INTEGER NOT NULL,'
+                     '"title" TEXT NOT NULL,'
+                     '"user" INTEGER NOT NULL,'
+                     'PRIMARY KEY ("nlist_id" AUTOINCREMENT)'
+                     'FOREIGN KEY ("user") REFERENCES "users"("user_id") ON DELETE CASCADE);')
+        conn.commit()
+        conn.execute('CREATE TABLE "tasks_list"('
+                     '"tlist_id" INTEGER NOT NULL,'
+                     '"title" TEXT NOT NULL,'
+                     '"exp_date" TEXT NOT NULL,'
+                     '"user" INTEGER NOT NULL,'
+                     'PRIMARY KEY ("tlist_id" AUTOINCREMENT)'
+                     'FOREIGN KEY ("user") REFERENCES "users"("user_id") ON DELETE CASCADE);')
+        conn.commit()
+        conn.execute('CREATE TABLE "nlist_content"('
+                     '"ncontent_id" INTEGER NOT NULL,'
+                     '"note" TEXT NOT NULL,'
+                     '"tick" INTEGER NOT NULL,'
+                     '"nlist" INTEGER NOT NULL,'
+                     'PRIMARY KEY("ncontent_id" AUTOINCREMENT)'
+                     'FOREIGN KEY ("nlist") REFERENCES "notes_list"("nlist_id") ON DELETE CASCADE);')
+        conn.commit()
+        conn.execute('CREATE TABLE "tlist_content"('
+                     '"tcontent_id" INTEGER NOT NULL,'
+                     '"task" TEXT NOT NULL,'
+                     '"complete" INTEGER NOT NULL,'
+                     '"tlist" INTEGER NOT NULL,'
+                     'PRIMARY KEY("ncontent_id" AUTOINCREMENT)'
+                     'FOREIGN KEY ("tlist") REFERENCES "tasks_list"("tlist_id") ON DELETE CASCADE);')
+        conn.commit()
 else:
     with conn:
         conn.execute('CREATE TABLE IF NOT EXISTS"users"('
@@ -50,6 +81,36 @@ else:
                      '"user" INTEGER NOT NULL,'
                      'PRIMARY KEY ("task_id" AUTOINCREMENT),'
                      'FOREIGN KEY ("user") REFERENCES "users"("user_id") ON DELETE CASCADE);')
+        conn.commit()
+        conn.execute('CREATE TABLE IF NOT EXISTS "notes_list"('
+                     '"nlist_id" INTEGER NOT NULL,'
+                     '"title" TEXT NOT NULL,'
+                     '"user" INTEGER NOT NULL,'
+                     'PRIMARY KEY ("nlist_id" AUTOINCREMENT)'
+                     'FOREIGN KEY ("user") REFERENCES "users"("user_id") ON DELETE CASCADE);')
+        conn.commit()
+        conn.execute('CREATE TABLE IF NOT EXISTS "tasks_list"('
+                     '"tlist_id" INTEGER NOT NULL,'
+                     '"title" TEXT NOT NULL,'
+                     '"user" INTEGER NOT NULL,'
+                     'PRIMARY KEY ("tlist_id" AUTOINCREMENT)'
+                     'FOREIGN KEY ("user") REFERENCES "users"("user_id") ON DELETE CASCADE);')
+        conn.commit()
+        conn.execute('CREATE TABLE IF NOT EXISTS "nlist_content"('
+                     '"ncontent_id" INTEGER NOT NULL,'
+                     '"note" TEXT NOT NULL,'
+                     '"tick" INTEGER NOT NULL,'
+                     '"nlist" INTEGER NOT NULL,'
+                     'PRIMARY KEY("ncontent_id" AUTOINCREMENT)'
+                     'FOREIGN KEY ("nlist") REFERENCES "notes_list"("nlist_id") ON DELETE CASCADE);')
+        conn.commit()
+        conn.execute('CREATE TABLE IF NOT EXISTS "tlist_content"('
+                     '"tcontent_id" INTEGER NOT NULL,'
+                     '"task" TEXT NOT NULL,'
+                     '"complete" INTEGER NOT NULL,'
+                     '"tlist" INTEGER NOT NULL,'
+                     'PRIMARY KEY("tcontent_id" AUTOINCREMENT)'
+                     'FOREIGN KEY ("tlist") REFERENCES "tasks_list"("tlist_id") ON DELETE CASCADE);')
         conn.commit()
 
 
@@ -107,10 +168,16 @@ class Main:
                 notes.Notes.menu(notes.Notes, self.username)
             elif choice == "2":
                 tasks.Tasks.menu(tasks.Tasks, self.username)
+            elif choice == "3":
+                pass
+            elif choice == "4":
+                pass
             elif choice == "q" or choice.lower() == "q":
                 print(f"Żegnaj, {self.username}!")
                 conn.close()
                 break
+            else:
+                print("Brak takiej opcji. Spróbuj jeszcze raz!")
 
     def test(self):
         print("Działa")
