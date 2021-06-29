@@ -162,6 +162,7 @@ class Main:
             print("Gdzie chciałbyś teraz się przenieść?\n"
                   "[1]Notatki, \n"
                   "[2]Zadania, \n"
+                  "[3]Listy rzeczy, \n"
                   "[q]Wyjść \n")
             choice = input("Wybierz: ")
             if choice == "1":
@@ -169,7 +170,7 @@ class Main:
             elif choice == "2":
                 tasks.Tasks.menu(tasks.Tasks, self.username)
             elif choice == "3":
-                pass
+                notes_list.NotesList.menu(notes_list.NotesList, self.username)
             elif choice == "4":
                 pass
             elif choice == "q" or choice.lower() == "q":
@@ -178,9 +179,6 @@ class Main:
                 break
             else:
                 print("Brak takiej opcji. Spróbuj jeszcze raz!")
-
-    def test(self):
-        print("Działa")
 
 
 Main.login(Main)
